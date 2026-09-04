@@ -1,0 +1,1052 @@
+/* ==========================================================================
+   TeleConnect Theme - Identidad Visual Profesional en Tonos Azul Marino
+   Plataforma Segura de Videoconferencias de Telecomunicaciones
+   ========================================================================== */
+
+:root {
+  --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  
+  /* Paleta Azul Marino (Navy Blue & Slate) */
+  --navy-darkest: #0a1128;      /* Azul marino profundo medianoche */
+  --navy-darker: #0c1b33;       /* Azul marino base */
+  --navy-dark: #12284c;         /* Azul marino medio */
+  --navy-brand: #1c3d72;        /* Azul corporativo */
+  --navy-primary: #1e40af;      /* Azul marino real */
+  --navy-accent: #2563eb;       /* Azul vibrante interactivo */
+  --navy-light-accent: #38bdf8; /* Azul cian / enlace seguro */
+  --navy-subtle-bg: #f0f4f8;    /* Fondo suave */
+  --navy-surface: #ffffff;      /* Superficie de tarjetas */
+  --navy-surface-alt: #f8fafc;  /* Superficie secundaria */
+
+  /* Textos */
+  --text-main: #0f172a;         /* Texto principal de alto contraste */
+  --text-secondary: #334155;    /* Texto secundario */
+  --text-muted: #64748b;        /* Texto sutil */
+  --text-inverse: #ffffff;      /* Texto sobre fondos oscuros */
+
+  /* Bordes y Sombras */
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --border-accent: #93c5fd;
+  --shadow-sm: 0 1px 3px rgba(10, 17, 40, 0.05);
+  --shadow-md: 0 4px 14px rgba(10, 17, 40, 0.08);
+  --shadow-lg: 0 10px 25px -5px rgba(10, 17, 40, 0.12), 0 8px 10px -6px rgba(10, 17, 40, 0.06);
+
+  /* Estados y VPN */
+  --vpn-green: #059669;
+  --vpn-bg: #ecfdf5;
+  --vpn-border: #a7f3d0;
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--navy-subtle-bg);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   Cabecera Principal (Navbar Azul Marino Elegante)
+   -------------------------------------------------------------------------- */
+.meet-header {
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  background: linear-gradient(90deg, #0c1b33 0%, #12284c 60%, #1c3d72 100%);
+  color: var(--text-inverse);
+  box-shadow: 0 2px 10px rgba(10, 17, 40, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.meet-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.meet-logo-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2563eb, #38bdf8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+  color: #ffffff;
+}
+
+.meet-logo-text {
+  font-size: 21px;
+  color: #e2e8f0;
+  font-weight: 400;
+  letter-spacing: -0.3px;
+}
+.meet-logo-text strong {
+  color: #ffffff;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ffffff, #93c5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Barra Central: Entrada de Código y Botón Principal */
+.meet-header-center {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  max-width: 640px;
+  margin: 0 32px;
+}
+
+.meet-code-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  padding: 4px 8px 4px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  flex: 1;
+  transition: all 0.2s ease;
+}
+
+.meet-code-wrapper:focus-within {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: var(--navy-light-accent);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+}
+
+.meet-code-input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: #ffffff;
+  width: 100%;
+  background: transparent;
+}
+
+.meet-code-input::placeholder {
+  color: #94a3b8;
+}
+
+.meet-code-icon {
+  color: #94a3b8;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.btn-join {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-join:disabled {
+  background: rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.btn-join:not(:disabled):hover {
+  background: #1d4ed8;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+}
+
+/* Botón "+ Nueva Reunión" con estilo azul corporativo */
+.btn-new-meeting {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  height: 44px;
+  padding: 0 20px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.btn-new-meeting:hover {
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+/* Header Acciones Derecha */
+.meet-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.btn-upgrade-pill {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: default;
+}
+
+.user-avatar-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Insignia VPN en Cabecera */
+.vpn-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.badge-vpn-connected {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.badge-vpn-dev {
+  background-color: rgba(56, 189, 248, 0.18);
+  color: #7dd3fc;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+}
+
+.badge-vpn-warning {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   Estructura: Sidebar + Contenido
+   -------------------------------------------------------------------------- */
+.meet-app-layout {
+  display: flex;
+  min-height: calc(100vh - 68px);
+}
+
+/* Barra Lateral Azul Marino Suave */
+.meet-sidebar {
+  width: 96px;
+  background-color: #0c1b33;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  gap: 20px;
+  border-right: 1px solid #1e293b;
+}
+
+.sidebar-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 600;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.sidebar-icon-wrapper {
+  width: 54px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.sidebar-nav-item.active .sidebar-icon-wrapper {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.sidebar-nav-item.active {
+  color: #38bdf8;
+}
+
+.sidebar-nav-item:not(.active):hover .sidebar-icon-wrapper {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+/* Área Principal */
+.meet-main-content {
+  flex: 1;
+  padding: 28px 44px 48px 44px;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   Barra Superior de Fecha y Navegación Semanal
+   -------------------------------------------------------------------------- */
+.meet-calendar-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  background: #ffffff;
+  padding: 14px 24px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+}
+
+.current-date-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy-darker);
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.current-date-heading:hover {
+  background-color: var(--navy-subtle-bg);
+}
+
+.week-navigation-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--navy-subtle-bg);
+  padding: 4px 8px;
+  border-radius: 14px;
+}
+
+.week-nav-arrow {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--navy-brand);
+  transition: background 0.15s;
+}
+
+.week-nav-arrow:hover {
+  background-color: #e2e8f0;
+}
+
+.week-days-list {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+}
+
+.week-day-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 50px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.week-day-name {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.week-day-num {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 3px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.week-day-pill.active {
+  background: var(--navy-darker);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(12, 27, 51, 0.25);
+}
+
+.week-day-pill.active .week-day-name {
+  color: #38bdf8;
+}
+
+.week-day-pill.active .week-day-num {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.week-day-pill:hover:not(.active) {
+  background-color: #e2e8f0;
+}
+
+/* --------------------------------------------------------------------------
+   Banner Informativo (Navy Telecom Card)
+   -------------------------------------------------------------------------- */
+.meet-banner-card {
+  border: 1px solid #bfdbfe;
+  border-radius: 16px;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  box-shadow: var(--shadow-sm);
+}
+
+.banner-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.banner-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1e40af;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(30, 64, 175, 0.25);
+}
+
+.banner-text-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+.banner-text-desc {
+  font-size: 13px;
+  color: #334155;
+}
+
+.banner-btn-link {
+  background: #1e40af;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  transition: all 0.15s;
+}
+
+.banner-btn-link:hover {
+  background: #1d4ed8;
+  box-shadow: 0 2px 6px rgba(30, 64, 175, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   Estado Vacío Personalizado (Sleek Modern Telecom Theme)
+   -------------------------------------------------------------------------- */
+.meet-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px 60px 20px;
+  text-align: center;
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px dashed var(--border-medium);
+  box-shadow: var(--shadow-sm);
+}
+
+.empty-state-illustration {
+  width: 220px;
+  height: 140px;
+  margin-bottom: 20px;
+}
+
+.empty-state-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--navy-darker);
+  margin-bottom: 8px;
+}
+
+.empty-state-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+/* --------------------------------------------------------------------------
+   Tarjetas de Reuniones
+   -------------------------------------------------------------------------- */
+.meetings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.meeting-card {
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 22px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  border-top: 4px solid var(--navy-primary);
+}
+
+.meeting-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--navy-accent);
+}
+
+.meeting-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.meeting-card-time {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy-primary);
+  background: #eff6ff;
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid #bfdbfe;
+}
+
+.meeting-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--navy-darker);
+  margin-bottom: 6px;
+}
+
+.meeting-card-code {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-family: monospace;
+  background: #f8fafc;
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-bottom: 14px;
+}
+
+.meeting-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-light);
+}
+
+.btn-card-start {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s;
+}
+
+.btn-card-start:hover {
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+}
+
+.btn-card-copy {
+  background: #ffffff;
+  border: 1px solid var(--border-medium);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-card-copy:hover {
+  background: #f8fafc;
+  border-color: var(--navy-accent);
+  color: var(--navy-primary);
+}
+
+/* --------------------------------------------------------------------------
+   Modal de Configuración (Audio / Video) - Estilo Navy Elegante
+   -------------------------------------------------------------------------- */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(10, 17, 40, 0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-backdrop.show {
+  display: flex;
+}
+
+.modal-box-meet {
+  background: #ffffff;
+  border-radius: 18px;
+  width: 700px;
+  max-width: 92vw;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header-meet {
+  padding: 18px 26px;
+  background: var(--navy-darker);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title-meet {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.modal-close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  font-size: 20px;
+  color: #ffffff;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.modal-close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.modal-body-meet {
+  display: flex;
+  min-height: 360px;
+}
+
+/* Sidebar del modal */
+.settings-tabs-sidebar {
+  width: 190px;
+  background: #f8fafc;
+  border-right: 1px solid var(--border-light);
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.settings-tab-btn.active {
+  background: var(--navy-darker);
+  color: #38bdf8;
+  box-shadow: 0 2px 6px rgba(12, 27, 51, 0.2);
+}
+
+.settings-tab-btn:hover:not(.active) {
+  background-color: #e2e8f0;
+}
+
+/* Contenido del modal */
+.settings-tab-content-area {
+  flex: 1;
+  padding: 28px 32px;
+}
+
+.settings-section-block {
+  margin-bottom: 24px;
+}
+
+.settings-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy-primary);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.settings-field-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.settings-select-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-medium);
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: #ffffff;
+  transition: border-color 0.2s;
+}
+
+.settings-select-wrapper:focus-within {
+  border-color: var(--navy-accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.settings-select-icon {
+  color: var(--navy-primary);
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.settings-select {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-main);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* Vúmetro de audio (3 puntos cyan/navy dinámicos) */
+.audio-meter-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0c1b33, #1e40af);
+  color: #38bdf8;
+  box-shadow: 0 2px 6px rgba(12, 27, 51, 0.2);
+}
+
+.meter-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #38bdf8;
+  border-radius: 50%;
+  transition: transform 0.08s ease;
+}
+
+.btn-test-speaker {
+  background: #f1f5f9;
+  border: 1px solid var(--border-medium);
+  color: var(--navy-primary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 10px 18px;
+  border-radius: 8px;
+  transition: all 0.15s;
+}
+
+.btn-test-speaker:hover {
+  background: #e2e8f0;
+  border-color: var(--navy-accent);
+}
+
+/* Previsualización de video en modal */
+.video-preview-container {
+  width: 100%;
+  height: 220px;
+  background: #0a1128;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--navy-dark);
+}
+
+.video-preview-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.video-preview-placeholder {
+  color: #94a3b8;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* --------------------------------------------------------------------------
+   Formularios de Autenticación (Login & Registro)
+   -------------------------------------------------------------------------- */
+.auth-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0a1128 0%, #0c1b33 50%, #1e3a8a 100%);
+  padding: 20px;
+}
+
+.auth-card-meet {
+  width: 460px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.auth-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--navy-darker);
+  margin-top: 14px;
+  letter-spacing: -0.5px;
+}
+
+.auth-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.form-group-meet {
+  margin-bottom: 20px;
+}
+
+.form-label-meet {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.form-control-meet {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border-medium);
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-main);
+  background: #ffffff;
+  transition: all 0.2s;
+}
+
+.form-control-meet:focus {
+  border-color: var(--navy-accent);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+.btn-primary-meet {
+  width: 100%;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #0c1b33, #1e40af);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(12, 27, 51, 0.25);
+}
+
+.btn-primary-meet:hover {
+  background: linear-gradient(135deg, #12284c, #2563eb);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+}
+
+/* Menú Desplegable de "+ Nuevo" */
+.dropdown-menu-meet {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 10px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-light);
+  min-width: 270px;
+  padding: 8px 0;
+  display: none;
+  z-index: 200;
+}
+
+.dropdown-menu-meet.show {
+  display: block;
+}
+
+.dropdown-item-meet {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy-darker);
+  cursor: pointer;
+  transition: background-color 0.15s;
+  text-decoration: none;
+}
+
+.dropdown-item-meet:hover {
+  background-color: var(--navy-subtle-bg);
+  color: var(--navy-primary);
+}

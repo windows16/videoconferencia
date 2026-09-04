@@ -1,0 +1,59 @@
+# ==============================================================================
+# SEGURIDAD: EXCLUSIÓN DE CLAVES, ACCESOS Y BASE DE DATOS
+# ==============================================================================
+
+# Bases de datos locales (CONTIENEN USUARIOS, CONTRASEÑAS, SESIONES Y REUNIONES)
+*.sqlite3
+*.sqlite3-journal
+db.sqlite3
+
+# Archivos con secretos y credenciales de entorno
+.env
+.env.*
+!.env.example
+local_settings.py
+secrets.json
+*.json.key
+
+# Claves criptográficas, certificados SSL y perfiles de VPN
+*.pem
+*.key
+*.crt
+*.p12
+*.ovpn
+*.conf.vpn
+id_rsa
+id_rsa.pub
+credentials/
+
+# Caché de Python y compilados
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Entornos virtuales
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Archivos de logs y depuración
+*.log
+*.pot
+
+# Archivos de IDE y sistema operativo
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Archivos estáticos recolectados o subidas de usuarios
+staticfiles/
+media/

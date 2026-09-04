@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - TeleConnect Telecomunicaciones</title>
+  <link rel="stylesheet" href="/static/css/google-meet.css">
+</head>
+<body>
+  <div class="auth-page-wrapper">
+    <div class="auth-card-meet" style="width: 520px;">
+      <div class="auth-header">
+        <div style="display: flex; justify-content: center; margin-bottom: 14px;">
+          <div style="width: 58px; height: 58px; border-radius: 16px; background: linear-gradient(135deg, #1e40af, #38bdf8); display: flex; align-items: center; justify-content: center; color: #ffffff; box-shadow: 0 8px 20px rgba(30, 64, 175, 0.4);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z"/>
+              <circle cx="12" cy="11" r="3"/>
+              <path d="M17 9l3-2v8l-3-2"/>
+            </svg>
+          </div>
+        </div>
+        <h1 class="auth-title">Crear Cuenta TeleConnect</h1>
+        <p class="auth-subtitle">Acceso seguro a videoconferencias y servidor VPN</p>
+      </div>
+
+      {% if form.errors %}
+      <div style="background-color: #fef2f2; color: #b91c1c; padding: 12px 16px; border-radius: 10px; font-size: 13px; margin-bottom: 20px; border: 1px solid #fecaca;">
+        Por favor corrige los errores indicados en el formulario.
+      </div>
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <div>
+            <label class="form-label-meet">Nombre</label>
+            {{ form.first_name }}
+            {% if form.first_name.errors %}<small style="color:#b91c1c;">{{ form.first_name.errors.0 }}</small>{% endif %}
+          </div>
+          <div>
+            <label class="form-label-meet">Apellidos</label>
+            {{ form.last_name }}
+            {% if form.last_name.errors %}<small style="color:#b91c1c;">{{ form.last_name.errors.0 }}</small>{% endif %}
+          </div>
+        </div>
+
+        <div class="form-group-meet">
+          <label class="form-label-meet">Nombre de usuario</label>
+          {{ form.username }}
+          {% if form.username.errors %}<small style="color:#b91c1c;">{{ form.username.errors.0 }}</small>{% endif %}
+        </div>
+
+        <div class="form-group-meet">
+          <label class="form-label-meet">Correo institucional o personal</label>
+          {{ form.email }}
+          {% if form.email.errors %}<small style="color:#b91c1c;">{{ form.email.errors.0 }}</small>{% endif %}
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+          <div>
+            <label class="form-label-meet">Contraseña</label>
+            {{ form.password }}
+            {% if form.password.errors %}<small style="color:#b91c1c;">{{ form.password.errors.0 }}</small>{% endif %}
+          </div>
+          <div>
+            <label class="form-label-meet">Confirmar Contraseña</label>
+            {{ form.password_confirm }}
+            {% if form.password_confirm.errors %}<small style="color:#b91c1c;">{{ form.password_confirm.errors.0 }}</small>{% endif %}
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <a href="{% url 'login' %}" style="color: #2563eb; font-size: 14px; font-weight: 600; text-decoration: none;">
+            Ya tengo una cuenta
+          </a>
+          <button type="submit" class="btn-card-start" style="padding: 10px 28px; font-size: 14px;">
+            Registrarme
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

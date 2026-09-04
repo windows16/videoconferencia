@@ -1,0 +1,434 @@
+/* ==========================================================================
+   Videoconference Room - Navy Blue & Telecom Cyber Theme
+   ========================================================================== */
+
+.meet-room-body {
+  background-color: #070d1e;
+  color: #ffffff;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cabecera Superior de la Sala */
+.room-header {
+  height: 60px;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #0a1329 0%, #0e1e3e 100%);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+  z-index: 10;
+}
+
+.room-title-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.room-meeting-code {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: #38bdf8;
+}
+
+.room-vpn-secure-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background-color: rgba(5, 150, 105, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(5, 150, 105, 0.4);
+}
+
+.room-clock {
+  font-size: 14px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+/* Área Principal de Videollamada */
+.room-main-area {
+  flex: 1;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  padding: 16px 20px;
+  gap: 16px;
+  background: radial-gradient(circle at center, #0f1c38 0%, #070d1e 100%);
+}
+
+.room-video-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 16px;
+  align-content: center;
+  justify-content: center;
+  max-height: calc(100vh - 160px);
+}
+
+.video-tile {
+  background-color: #0d1b33;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  border: 2px solid #1e3a8a;
+  transition: all 0.2s ease;
+}
+
+.video-tile.speaking {
+  border-color: #38bdf8;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+}
+
+.video-tile video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.video-tile-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.participant-avatar-large {
+  width: 86px;
+  height: 86px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #1e40af, #38bdf8);
+  color: #ffffff;
+  font-size: 34px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(30, 64, 175, 0.4);
+}
+
+.tile-overlay-bottom {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  background-color: rgba(10, 17, 40, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 5px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tile-overlay-top-right {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  gap: 8px;
+}
+
+.tile-icon-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background-color: rgba(10, 17, 40, 0.85);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tile-icon-badge.muted {
+  background-color: rgba(220, 38, 38, 0.9);
+  border-color: #ef4444;
+}
+
+/* --------------------------------------------------------------------------
+   Barra Inferior de Herramientas (Navy Dock)
+   -------------------------------------------------------------------------- */
+.room-bottom-bar {
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  background: linear-gradient(180deg, #0a1329 0%, #070d1e 100%);
+  border-top: 1px solid rgba(56, 189, 248, 0.15);
+  z-index: 10;
+}
+
+.bottom-left-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #cbd5e1;
+  font-size: 14px;
+  min-width: 200px;
+}
+
+.bottom-center-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ctrl-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: #12284c;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.ctrl-btn:hover {
+  background-color: #1c3d72;
+  transform: translateY(-2px);
+  border-color: #38bdf8;
+}
+
+.ctrl-btn.off {
+  background-color: #dc2626;
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+.ctrl-btn.off:hover {
+  background-color: #b91c1c;
+}
+
+.ctrl-btn.active {
+  background: linear-gradient(135deg, #2563eb, #38bdf8);
+  color: #ffffff;
+  border-color: #93c5fd;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+}
+
+.btn-end-call {
+  background-color: #dc2626;
+  border-color: #ef4444;
+  color: #ffffff;
+  width: 64px;
+  border-radius: 14px;
+}
+
+.btn-end-call:hover {
+  background-color: #b91c1c;
+}
+
+.bottom-right-panels {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 200px;
+  justify-content: flex-end;
+}
+
+.panel-toggle-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s;
+}
+
+.panel-toggle-btn:hover {
+  background-color: #12284c;
+  color: #ffffff;
+}
+
+.badge-notification {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+}
+
+/* --------------------------------------------------------------------------
+   Panel Lateral (Participantes, Chat & Admisión)
+   -------------------------------------------------------------------------- */
+.room-side-panel {
+  width: 380px;
+  background-color: #0c1b33;
+  border-radius: 16px;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.room-side-panel.show {
+  display: flex;
+}
+
+.side-panel-header {
+  height: 58px;
+  padding: 0 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #091528;
+}
+
+.side-panel-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+}
+
+.side-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px;
+}
+
+/* Tarjetas de Admisión en la Sala de Espera */
+.admission-card {
+  background-color: #12284c;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  border-left: 4px solid #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.admission-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.admission-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.btn-admit {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-admit:hover {
+  background: #047857;
+}
+
+.btn-deny {
+  background: transparent;
+  color: #f87171;
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-deny:hover {
+  background-color: rgba(239, 68, 68, 0.15);
+}
+
+/* Toast Emergente para el Anfitrión */
+.admission-toast-notification {
+  position: absolute;
+  top: 75px;
+  right: 28px;
+  background-color: #0c1b33;
+  color: #ffffff;
+  padding: 16px 22px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 200;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  animation: toastSlide 0.3s ease-out;
+}
+
+@keyframes toastSlide {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Sala de Espera para Invitados */
+.waiting-room-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  padding: 30px;
+}
+
+.waiting-spinner {
+  width: 54px;
+  height: 54px;
+  border: 4px solid rgba(56, 189, 248, 0.15);
+  border-top-color: #38bdf8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 24px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
