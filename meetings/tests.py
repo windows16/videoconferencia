@@ -75,3 +75,43 @@ class MeetingPlatformTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Reuniones')
         self.assertContains(response, 'Prueba Videoconferencia Redes')
+
+    def test_chat_message_flow(self):
+        """Verifica el envío y obtención de mensajes de chat en sala."""
+        self.client.login(username='sara_telecom', password='TestPassword123!')
+        
+        # Enviar mensaje
+        resp = self.client.post(
+            reverse('api_room_messages', kwargs={'code': self.meeting.code}),
+            data='{"message": "Hola a todos en la sesión"}',
+            content_type='application/json'
+        )
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertTrue(data.get('success'))
+        self.assertEqual(data['message']['message'], 'Hola a todos en la sesión')
+
+        # Obtener mensajes
+        resp_get = self.client.get(reverse('api_room_messages', kwargs={'code': self.meeting.code}))
+        self.assertEqual(resp_get.status_code, 200)
+        messages = resp_get.json().get('messages', [])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(messages[0]['message'], 'Hola a todos en la sesión')
+
+    def test_room_heartbeat_and_presence(self):
+        """Verifica el registro de presencia y lista de participantes activos."""
+        self.client.login(username='sara_telecom', password='TestPassword123!')
+        
+        resp = self.client.post(
+            reverse('api_room_heartbeat', kwargs={'code': self.meeting.code}),
+            data='{"peer_id": "telemeet-test-peer-1", "is_audio_muted": false, "is_video_muted": false, "is_hand_raised": true}',
+            content_type='application/json'
+        )
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertTrue(data.get('success'))
+        self.assertEqual(data.get('count'), 1)
+        participant = data['participants'][0]
+        self.assertEqual(participant['peer_id'], 'telemeet-test-peer-1')
+        self.assertTrue(participant['is_hand_raised'])
+

@@ -51,7 +51,7 @@ Aplicación web integral para videoconferencias, gestión de sesiones virtuales,
 
 1. **Instalar dependencias**:
    ```bash
-   pip install django asgiref sqlparse
+   pip install -r requirements.txt
    ```
 
 2. **Configurar variables locales (opcional)**:
@@ -83,3 +83,12 @@ Aplicación web integral para videoconferencias, gestión de sesiones virtuales,
   ```bash
   python manage.py createsuperuser
   ```
+
+---
+
+## 🌐 Despliegue en Producción y Servidor VPN
+
+Para poner la plataforma en un servidor real con dominio propio, certificado SSL/HTTPS (necesario para permitir cámara y micrófono en conexiones remotas) y configurar el túnel seguro VPN, consulta la guía completa en:
+
+📖 **[DEPLOYMENT.md](DEPLOYMENT.md)**
+

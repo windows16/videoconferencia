@@ -57,11 +57,11 @@
 
   <!-- Área Principal con Cuadrícula de Video y Paneles -->
   <main class="room-main-area">
-    <!-- Grid de Videos -->
-    <div class="room-video-grid">
+    <!-- Grid de Videos Dinámico -->
+    <div class="room-video-grid" id="roomVideoGrid">
       
       <!-- Baldosa de Video Local (Usuario) -->
-      <div class="video-tile" id="localTile">
+      <div class="video-tile local-tile" id="localTile">
         <video id="localVideo" autoplay playsinline muted></video>
         
         <!-- Avatar alternativo si la cámara está apagada -->
@@ -72,7 +72,7 @@
         </div>
 
         <div class="tile-overlay-bottom">
-          <span>{{ user.get_full_name|default:user.username }} (Tú)</span>
+          <span id="localTileName">{{ user.get_full_name|default:user.username }} (Tú)</span>
         </div>
 
         <div class="tile-overlay-top-right">
@@ -81,28 +81,14 @@
         </div>
       </div>
 
-      <!-- Baldosa de Participante Remoto / Ilustración de llamada -->
-      <div class="video-tile" id="remotePlaceholderTile">
-        <div class="video-tile-placeholder">
-          <div class="participant-avatar-large" style="background: linear-gradient(135deg, #059669, #10b981);">
-            VPN
-          </div>
-          <div style="font-size: 14px; color: #e2e8f0; font-weight: 600;">Servidor Central de Telecomunicaciones</div>
-        </div>
-        <div class="tile-overlay-bottom">
-          <span>Canal de Transmisión Activo</span>
-        </div>
-        <div class="tile-overlay-top-right">
-          <div class="tile-icon-badge">🔒</div>
-        </div>
-      </div>
+      <!-- Las baldosas de participantes remotos se agregarán aquí dinámicamente -->
 
     </div>
 
     <!-- Panel Lateral: Participantes y Admisión de Conexiones -->
     <aside class="room-side-panel" id="participantsPanel">
       <div class="side-panel-header">
-        <h3 class="side-panel-title">Participantes y Admisiones</h3>
+        <h3 class="side-panel-title">Participantes en Sala (<span id="participantsCount">1</span>)</h3>
         <button type="button" class="icon-btn btn-close-side-panel" style="color: #ffffff;">&times;</button>
       </div>
       <div class="side-panel-body">
@@ -120,21 +106,23 @@
         <hr style="border: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 16px;">
         {% endif %}
 
-        <!-- Lista de Personas en la Llamada -->
+        <!-- Lista Dinámica de Personas en la Llamada -->
         <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #94a3b8; margin-bottom: 12px; letter-spacing: 0.5px;">
           Conectados en la sesión
         </div>
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #1e40af, #38bdf8); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #ffffff;">
-              {{ user.first_name|first|default:user.username|first|upper }}
+        <div id="activeParticipantsListContainer">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #1e40af, #38bdf8); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #ffffff;">
+                {{ user.first_name|first|default:user.username|first|upper }}
+              </div>
+              <div>
+                <div style="font-size: 14px; font-weight: 600; color: #ffffff;">{{ user.get_full_name|default:user.username }} (Tú)</div>
+                <div style="font-size: 11px; color: #38bdf8;">{% if is_host %}Organizador / Host{% else %}Participante Seguro{% endif %}</div>
+              </div>
             </div>
-            <div>
-              <div style="font-size: 14px; font-weight: 600; color: #ffffff;">{{ user.get_full_name|default:user.username }} (Tú)</div>
-              <div style="font-size: 11px; color: #38bdf8;">{% if is_host %}Organizador / Host{% else %}Participante Seguro{% endif %}</div>
-            </div>
+            <span>🎙️</span>
           </div>
-          <span>🎙️</span>
         </div>
       </div>
     </aside>
@@ -145,14 +133,14 @@
         <h3 class="side-panel-title">Chat de la Sesión</h3>
         <button type="button" class="icon-btn btn-close-side-panel" style="color: #ffffff;">&times;</button>
       </div>
-      <div class="side-panel-body" id="roomChatMessages" style="display: flex; flex-direction: column;">
+      <div class="side-panel-body" id="roomChatMessages" style="display: flex; flex-direction: column; overflow-y: auto; flex: 1; padding: 16px;">
         <div style="font-size: 12px; color: #94a3b8; text-align: center; margin-bottom: 16px;">
-          Mensajes protegidos y transmitidos por el túnel cifrado de la VPN.
+          Mensajes protegidos y transmitidos en tiempo real por el canal seguro.
         </div>
       </div>
       <!-- Entrada de Chat -->
       <div style="padding: 14px 18px; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; gap: 10px; background: #091528;">
-        <input type="text" id="roomChatInput" placeholder="Escribe un mensaje seguro..." style="flex: 1; background-color: #12284c; border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 10px; padding: 10px 16px; color: #ffffff; outline: none; font-family: inherit; font-size: 13px;">
+        <input type="text" id="roomChatInput" placeholder="Escribe un mensaje..." style="flex: 1; background-color: #12284c; border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 10px; padding: 10px 16px; color: #ffffff; outline: none; font-family: inherit; font-size: 13px;">
         <button type="button" id="btnSendChatMessage" class="ctrl-btn" style="width: 42px; height: 42px; background: #2563eb; color: #ffffff; border-radius: 10px;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -261,6 +249,7 @@
   {% include 'components/settings_modal.html' %}
 
   <!-- Scripts -->
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <script src="/static/js/meet-devices.js"></script>
   <script src="/static/js/waiting-room.js"></script>
   <script src="/static/js/room.js"></script>
@@ -270,10 +259,12 @@
       window.waitingRoomManager = new WaitingRoomManager("{{ meeting.code }}", {{ is_host|yesno:"true,false" }}, "{{ user_status }}");
 
       {% if user_status == 'ACCEPTED' or is_host %}
-      // Inicializar controles de la sala activa
+      // Inicializar controles de la sala activa y WebRTC
       window.meetingRoom = new MeetingRoom({
         meetingCode: "{{ meeting.code }}",
+        userId: {{ user.id }},
         userName: "{{ user.get_full_name|default:user.username }}",
+        userInitial: "{{ user.first_name|first|default:user.username|first|upper }}",
         isHost: {{ is_host|yesno:"true,false" }}
       });
       {% endif %}

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -96,6 +97,25 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Soporte para orígenes de confianza CSRF en producción (ej. https://tudominio.com)
+CSRF_TRUSTED_ORIGINS = []
+csrf_origins = os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', '')
+if csrf_origins:
+    CSRF_TRUSTED_ORIGINS.extend([origin.strip() for origin in csrf_origins.split(',') if origin.strip()])
+
+# Detección automática para despliegue en Render
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    if RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    render_origin = f"https://{RENDER_EXTERNAL_HOSTNAME}"
+    if render_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(render_origin)
+
+# Cabecera de proxy inverso para SSL (Nginx / Cloudflare / Render)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -109,3 +129,4 @@ VPN_SUBNET_PREFIX = os.environ.get('VPN_SUBNET_PREFIX', '10.8.0.')
 VPN_SERVER_PORT = int(os.environ.get('VPN_SERVER_PORT', 443))
 VPN_SERVER_NAME = os.environ.get('VPN_SERVER_NAME', 'Telecom-Secure-Server')
 VPN_ENFORCE = os.environ.get('VPN_ENFORCE', 'False').lower() in ('true', '1', 't')
+

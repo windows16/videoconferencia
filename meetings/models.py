@@ -79,3 +79,43 @@ class CallContact(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.email})"
+
+
+class ChatMessage(models.Model):
+    """Mensajes de chat intercambiados dentro de una sala de videoconferencia."""
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE, related_name='chat_messages')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    sender_name = models.CharField(max_length=120)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+        verbose_name = 'Mensaje de Chat'
+        verbose_name_plural = 'Mensajes de Chat'
+
+    def __str__(self):
+        return f"[{self.meeting.code}] {self.sender_name}: {self.message[:30]}"
+
+
+class RoomParticipant(models.Model):
+    """Participantes activos actualmente en la sala (rastreo de presencia en vivo)."""
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE, related_name='active_participants')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='meeting_participations')
+    peer_id = models.CharField(max_length=100, blank=True, default='')
+    display_name = models.CharField(max_length=120)
+    is_host = models.BooleanField(default=False)
+    is_audio_muted = models.BooleanField(default=False)
+    is_video_muted = models.BooleanField(default=False)
+    is_hand_raised = models.BooleanField(default=False)
+    joined_at = models.DateTimeField(auto_now_add=True)
+    last_seen = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('meeting', 'user')
+        verbose_name = 'Participante de Sala'
+        verbose_name_plural = 'Participantes de Sala'
+
+    def __str__(self):
+        return f"{self.display_name} en {self.meeting.code} (Peer: {self.peer_id})"
+

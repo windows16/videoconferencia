@@ -23,4 +23,8 @@ urlpatterns = [
     path('api/waiting-room/<str:code>/pending/', views.api_host_pending_requests, name='api_host_pending'),
     path('api/waiting-room/<str:code>/action/', views.api_host_action_request, name='api_host_action'),
     path('api/vpn/status/', views.api_vpn_status, name='api_vpn_status'),
+    path('api/room/<str:code>/messages/', views.api_meeting_messages, name='api_room_messages'),
+    path('api/room/<str:code>/heartbeat/', views.api_room_heartbeat, name='api_room_heartbeat'),
+    path('api/room/<str:code>/leave/', views.api_leave_room, name='api_room_leave'),
 ]
+

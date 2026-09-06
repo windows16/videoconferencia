@@ -9,7 +9,10 @@ from django.conf import settings
 import datetime
 import json
 
-from .models import Meeting, ConnectionRequest, CallContact, generate_meeting_code
+from .models import (
+    Meeting, ConnectionRequest, CallContact, ChatMessage,
+    RoomParticipant, generate_meeting_code
+)
 from .forms import LoginForm, RegisterForm, ScheduleMeetingForm
 from .vpn_service import check_vpn_connectivity
 
@@ -369,3 +372,131 @@ def api_vpn_status(request):
     """Devuelve las métricas actuales de seguridad y estado de la VPN hacia el servidor."""
     status_data = check_vpn_connectivity(request)
     return JsonResponse(status_data)
+
+# ==========================================
+# Endpoints de Chat y Señalización en Tiempo Real
+# ==========================================
+
+@login_required
+def api_meeting_messages(request, code):
+    """Obtiene o envía mensajes de chat en la sala de videoconferencia."""
+    meeting = get_object_or_404(Meeting, code=code)
+
+    if request.method == 'POST':
+        try:
+            body = json.loads(request.body)
+            msg_text = body.get('message', '').strip()
+            if not msg_text:
+                return JsonResponse({'error': 'Mensaje vacío'}, status=400)
+
+            sender_name = request.user.get_full_name() or request.user.username
+            msg = ChatMessage.objects.create(
+                meeting=meeting,
+                user=request.user,
+                sender_name=sender_name,
+                message=msg_text
+            )
+            return JsonResponse({
+                'success': True,
+                'message': {
+                    'id': msg.id,
+                    'user_id': request.user.id,
+                    'sender_name': msg.sender_name,
+                    'message': msg.message,
+                    'time': msg.created_at.strftime('%H:%M'),
+                    'is_me': True
+                }
+            })
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    # GET: devolver mensajes
+    after_id = request.GET.get('after_id')
+    messages_qs = meeting.chat_messages.all()
+    if after_id:
+        try:
+            messages_qs = messages_qs.filter(id__gt=int(after_id))
+        except ValueError:
+            pass
+
+    data = [
+        {
+            'id': m.id,
+            'user_id': m.user_id,
+            'sender_name': m.sender_name,
+            'message': m.message,
+            'time': m.created_at.strftime('%H:%M'),
+            'is_me': (m.user_id == request.user.id)
+        }
+        for m in messages_qs[:100]
+    ]
+    return JsonResponse({'messages': data})
+
+
+@login_required
+@require_POST
+def api_room_heartbeat(request, code):
+    """
+    Registra/actualiza la presencia en vivo del participante en la sala y devuelve
+    la lista de todos los pares activos (para conectarse automáticamente vía WebRTC).
+    """
+    meeting = get_object_or_404(Meeting, code=code)
+    try:
+        body = json.loads(request.body) if request.body else {}
+        peer_id = body.get('peer_id', '').strip()
+        is_audio_muted = body.get('is_audio_muted', False)
+        is_video_muted = body.get('is_video_muted', False)
+        is_hand_raised = body.get('is_hand_raised', False)
+        display_name = request.user.get_full_name() or request.user.username
+        is_host = (meeting.host == request.user)
+
+        # Actualizar o crear registro de presencia
+        participant, _ = RoomParticipant.objects.update_or_create(
+            meeting=meeting,
+            user=request.user,
+            defaults={
+                'peer_id': peer_id or f"user-{request.user.id}",
+                'display_name': display_name,
+                'is_host': is_host,
+                'is_audio_muted': is_audio_muted,
+                'is_video_muted': is_video_muted,
+                'is_hand_raised': is_hand_raised,
+                'last_seen': timezone.now()
+            }
+        )
+
+        # Considerar participantes activos en los últimos 20 segundos
+        threshold = timezone.now() - datetime.timedelta(seconds=20)
+        active_qs = RoomParticipant.objects.filter(meeting=meeting, last_seen__gte=threshold)
+
+        participants_list = [
+            {
+                'user_id': p.user_id,
+                'peer_id': p.peer_id,
+                'display_name': p.display_name,
+                'is_host': p.is_host,
+                'is_audio_muted': p.is_audio_muted,
+                'is_video_muted': p.is_video_muted,
+                'is_hand_raised': p.is_hand_raised,
+                'is_me': (p.user_id == request.user.id)
+            }
+            for p in active_qs
+        ]
+
+        return JsonResponse({
+            'success': True,
+            'participants': participants_list,
+            'count': len(participants_list)
+        })
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+
+@login_required
+@require_POST
+def api_leave_room(request, code):
+    """Elimina el registro de presencia cuando el usuario sale de la llamada."""
+    meeting = get_object_or_404(Meeting, code=code)
+    RoomParticipant.objects.filter(meeting=meeting, user=request.user).delete()
+    return JsonResponse({'success': True})
+

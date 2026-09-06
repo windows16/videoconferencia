@@ -107,6 +107,11 @@
   transform: scaleX(-1);
 }
 
+.video-tile.remote-tile video {
+  transform: none;
+}
+
+
 .video-tile-placeholder {
   display: flex;
   flex-direction: column;
