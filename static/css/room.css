@@ -437,3 +437,155 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* ==========================================================================
+   DISEÑO RESPONSIVO PARA LA SALA DE VIDEOCONFERENCIA (ROOM)
+   ========================================================================== */
+
+/* Tablets y Pantallas Medianas (<= 992px) */
+@media (max-width: 992px) {
+  .room-main-area {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .room-side-panel {
+    width: 320px;
+  }
+
+  .room-bottom-bar {
+    height: 76px;
+    padding: 0 16px;
+  }
+
+  .ctrl-btn {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Móviles y Pantallas Pequeñas (<= 768px) */
+@media (max-width: 768px) {
+  .room-header {
+    height: 52px;
+    padding: 0 14px;
+  }
+
+  .room-title-info {
+    gap: 8px;
+  }
+
+  .room-vpn-secure-badge {
+    padding: 2px 8px;
+    font-size: 10px;
+  }
+
+  .room-meeting-code {
+    font-size: 13px;
+    padding: 2px 6px;
+  }
+
+  .room-clock {
+    font-size: 12px;
+  }
+
+  .room-main-area {
+    padding: 8px;
+  }
+
+  /* Paneles laterales (Chat y Participantes) como Drawer de Pantalla Completa */
+  .room-side-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100% !important;
+    height: 100%;
+    z-index: 150;
+    border-radius: 0;
+  }
+
+  /* Cuadrícula de Video Móvil */
+  .room-video-grid {
+    grid-template-columns: 1fr !important;
+    max-height: calc(100vh - 130px);
+    gap: 8px;
+  }
+
+  .video-tile {
+    max-height: 45vh;
+    border-radius: 12px;
+  }
+
+  .participant-avatar-large {
+    width: 64px;
+    height: 64px;
+    font-size: 24px;
+  }
+
+  /* Barra Inferior de Controles Móvil */
+  .room-bottom-bar {
+    height: 68px;
+    padding: 0 10px;
+  }
+
+  .bottom-left-info {
+    display: none; /* Ocultar en móvil para dar espacio a los controles */
+  }
+
+  .bottom-center-controls {
+    gap: 8px;
+  }
+
+  .ctrl-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ctrl-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .panel-toggle-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .panel-toggle-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Toast de Notificaciones para Móvil */
+  .admission-toast-notification {
+    top: 60px;
+    left: 12px;
+    right: 12px;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+}
+
+/* Móviles Muy Estrechos (<= 420px) */
+@media (max-width: 420px) {
+  .bottom-center-controls {
+    gap: 6px;
+  }
+
+  .ctrl-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .ctrl-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .btn-end-call {
+    width: 44px;
+  }
+}
+

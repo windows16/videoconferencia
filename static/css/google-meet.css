@@ -1050,3 +1050,184 @@ body {
   background-color: var(--navy-subtle-bg);
   color: var(--navy-primary);
 }
+
+/* ==========================================================================
+   DISEÑO RESPONSIVO (RESPONSIVE DESIGN SYSTEM)
+   ========================================================================== */
+
+/* Tablet y Pantallas Medianas (<= 1024px) */
+@media (max-width: 1024px) {
+  .meet-header {
+    padding: 0 16px;
+  }
+
+  .meet-header-center {
+    margin: 0 14px;
+    max-width: 480px;
+  }
+
+  .meet-main-content {
+    padding: 20px 24px 36px 24px;
+  }
+
+  .prejoin-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .prejoin-preview, .prejoin-actions {
+    width: 100%;
+    max-width: 580px;
+  }
+}
+
+/* Móviles y Tablets Pequeñas (<= 768px) */
+@media (max-width: 768px) {
+  .meet-header {
+    height: auto;
+    padding: 12px 14px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .meet-brand {
+    order: 1;
+  }
+
+  .meet-header-right {
+    order: 2;
+  }
+
+  .meet-header-center {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+    margin: 4px 0 0 0;
+  }
+
+  .meet-logo-text {
+    font-size: 18px;
+  }
+
+  .btn-upgrade-pill {
+    display: none;
+  }
+
+  /* Barra lateral se transforma en menú de navegación inferior */
+  .meet-app-layout {
+    flex-direction: column;
+    padding-bottom: 70px; /* Espacio para barra fija inferior */
+  }
+
+  .meet-sidebar {
+    width: 100%;
+    height: 60px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 150;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 0 10px;
+    border-right: none;
+    border-top: 1px solid #1e293b;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  .sidebar-nav-item {
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
+    width: auto;
+  }
+
+  .sidebar-icon-wrapper {
+    width: 44px;
+    height: 34px;
+  }
+
+  .meet-main-content {
+    padding: 16px 14px 28px 14px;
+  }
+
+  /* Calendario semanal adaptable */
+  .meet-calendar-top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+  }
+
+  .week-navigation-container {
+    width: 100%;
+    justify-content: space-between;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 6px;
+  }
+
+  .week-day-card {
+    min-width: 38px;
+    padding: 4px 6px;
+  }
+
+  /* Cuadrícula de tarjetas en 1 columna */
+  .meet-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Modales */
+  .schedule-modal-dialog,
+  .settings-modal-dialog {
+    width: 95% !important;
+    max-width: 95% !important;
+    margin: 16px auto;
+    padding: 18px;
+  }
+
+  .settings-tabs-header {
+    flex-wrap: wrap;
+  }
+
+  .auth-card-meet {
+    width: 100%;
+    max-width: 420px;
+    padding: 24px 20px;
+  }
+}
+
+/* Móviles Estrechos (<= 480px) */
+@media (max-width: 480px) {
+  .meet-code-wrapper {
+    padding: 4px 6px 4px 10px;
+  }
+
+  .meet-code-input {
+    font-size: 13px;
+  }
+
+  .btn-join {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .btn-new-meeting {
+    height: 38px;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+
+  .current-date-heading {
+    font-size: 16px;
+  }
+
+  .day-name {
+    font-size: 9px;
+  }
+
+  .day-number {
+    font-size: 13px;
+  }
+}
+
