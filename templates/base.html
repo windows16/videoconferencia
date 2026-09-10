@@ -7,8 +7,112 @@
   
   <!-- Estilos principales con Identidad en Tonos Azul Marino -->
   <link rel="stylesheet" href="/static/css/google-meet.css">
-  <link rel="stylesheet" href="/static/css/responsive.css">
   {% block extra_css %}{% endblock %}
+
+  <!-- Tailwind CSS Play CDN (Responsivo 100% centralizado con Tailwind) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      corePlugins: {
+        preflight: false,
+      },
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              darkest: '#0a1128',
+              darker: '#0c1b33',
+              dark: '#12284c',
+              brand: '#1c3d72',
+              primary: '#1e40af',
+              accent: '#2563eb',
+            }
+          }
+        }
+      },
+      plugins: [
+        function({ addBase, addComponents }) {
+          addBase({
+            'html, body': {
+              overflowX: 'hidden !important',
+              maxWidth: '100vw !important',
+              width: '100% !important',
+            },
+            'img, video, svg, iframe': {
+              maxWidth: '100%',
+            },
+          });
+          addComponents({
+            '@media (max-width: 1024px)': {
+              '.meet-header': { padding: '0 16px', gap: '8px' },
+              '.meet-header-center': { margin: '0 12px', maxWidth: 'none', flex: '1', minWidth: '0' },
+              '.meet-main-content': { padding: '20px 24px 36px 24px' },
+              '.meetings-grid': { gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' },
+            },
+            '@media (max-width: 768px)': {
+              '.meet-header': { padding: '0 12px', height: '56px', flexWrap: 'nowrap', gap: '6px' },
+              '.meet-logo-text': { display: 'none' },
+              '.meet-header-center': { flex: '1', margin: '0 6px', minWidth: '0', gap: '6px' },
+              '.meet-code-input': { fontSize: '13px', minWidth: '0' },
+              '.btn-upgrade-pill': { display: 'none' },
+              '.vpn-status-badge span': { display: 'none' },
+              '.vpn-status-badge': { padding: '6px 8px' },
+              '.meet-app-layout': { flexDirection: 'column', minHeight: 'calc(100vh - 56px)' },
+              '.meet-sidebar': {
+                width: '100%',
+                height: '56px',
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                alignItems: 'center',
+                padding: '0 16px',
+                gap: '0',
+                borderRight: 'none',
+                borderTop: '1px solid #1e293b',
+                position: 'fixed',
+                bottom: '0',
+                left: '0',
+                right: '0',
+                zIndex: '90',
+              },
+              '.sidebar-nav-item': { flexDirection: 'row', gap: '6px', width: 'auto', padding: '0 12px', fontSize: '12px' },
+              '.sidebar-icon-wrapper': { width: '36px', height: '36px' },
+              '.meet-main-content': { padding: '16px 16px 80px 16px' },
+              '.meet-calendar-top-bar': { flexDirection: 'column', alignItems: 'flex-start', gap: '12px', padding: '12px 16px' },
+              '.current-date-heading': { fontSize: '16px' },
+              '.week-navigation-container': { width: '100%', overflowX: 'auto', padding: '4px' },
+              '.week-days-list': { gap: '4px', flexWrap: 'nowrap' },
+              '.week-day-pill': { minWidth: '40px', padding: '4px 6px' },
+              '.meet-banner-card': { flexDirection: 'column', alignItems: 'flex-start', gap: '14px', padding: '14px 16px' },
+              '.banner-btn-link': { width: '100%', textAlign: 'center' },
+              '.meetings-grid, [class*="-grid"]': { gridTemplateColumns: '1fr !important' },
+              '.meeting-card, [class*="card"]': { padding: '16px' },
+              '.modal-box-meet, [class*="modal"]': { width: '95vw !important', maxWidth: '95vw !important', maxHeight: '90vh', overflowY: 'auto' },
+              '.modal-body-meet': { flexDirection: 'column !important', minHeight: 'auto' },
+              '.settings-tabs-sidebar': { width: '100% !important', flexDirection: 'row !important', borderRight: 'none !important', borderBottom: '1px solid #e2e8f0', padding: '10px', gap: '6px', overflowX: 'auto' },
+              '.settings-tab-btn': { padding: '8px 12px', fontSize: '13px', whiteSpace: 'nowrap' },
+              '.settings-tab-content-area': { padding: '16px 14px !important' },
+              '.auth-card-meet': { width: '100%', maxWidth: '100%', padding: '28px 20px' },
+              '.auth-page-wrapper': { padding: '12px', alignItems: 'flex-start', paddingTop: '40px' },
+            },
+            '@media (max-width: 480px)': {
+              '.meet-header': { padding: '0 8px', height: '52px' },
+              '.meet-logo-icon': { width: '34px', height: '34px' },
+              '.btn-new-meeting span': { display: 'none' },
+              '.btn-new-meeting': { width: '40px', height: '40px', padding: '0', justifyContent: 'center' },
+              '.btn-join': { padding: '8px 10px', fontSize: '12px' },
+              '.vpn-status-badge': { display: 'none' },
+              '.meet-sidebar': { height: '50px' },
+              '.meet-main-content': { padding: '12px 12px 72px 12px' },
+              '.auth-card-meet': { padding: '24px 16px' },
+              '.auth-title': { fontSize: '20px' },
+              '.meeting-card-actions': { flexWrap: 'wrap' },
+              '.btn-card-start, .btn-card-copy': { flex: '1', justifyContent: 'center', textAlign: 'center' },
+            }
+          });
+        }
+      ]
+    }
+  </script>
 </head>
 <body>
 

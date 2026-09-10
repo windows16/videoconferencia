@@ -14,13 +14,13 @@
       <button type="button" class="modal-close-btn" id="closeScheduleBtn" title="Cerrar">&times;</button>
     </div>
 
-    <form id="scheduleMeetingForm" style="padding: 24px 32px 32px 32px;">
+    <form id="scheduleMeetingForm" class="p-4 sm:p-8">
       <div class="form-group-meet">
         <label class="form-label-meet">Título de la Sesión</label>
         <input type="text" name="title" class="form-control-meet" placeholder="Ej. Conferencia Redes y Telecomunicaciones / VPN" required>
       </div>
 
-      <div class="form-group-meet" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div class="form-group-meet grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label class="form-label-meet">Fecha</label>
           <input type="date" name="scheduled_date" class="form-control-meet" value="{{ selected_date_str }}" required>
@@ -52,9 +52,9 @@
         </p>
       </div>
 
-      <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
-        <button type="button" class="btn-card-copy" onclick="document.getElementById('scheduleModal').classList.remove('show')">Cancelar</button>
-        <button type="submit" class="btn-card-start" style="padding: 10px 24px;">Guardar sesión</button>
+      <div class="flex flex-wrap sm:flex-nowrap justify-end gap-3 mt-6">
+        <button type="button" class="btn-card-copy flex-1 sm:flex-initial justify-center" onclick="document.getElementById('scheduleModal').classList.remove('show')">Cancelar</button>
+        <button type="submit" class="btn-card-start flex-1 sm:flex-initial justify-center" style="padding: 10px 24px;">Guardar sesión</button>
       </div>
     </form>
   </div>

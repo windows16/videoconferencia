@@ -6,7 +6,61 @@
   <title>{{ meeting.title }} - TeleConnect</title>
   <link rel="stylesheet" href="/static/css/google-meet.css">
   <link rel="stylesheet" href="/static/css/room.css">
-  <link rel="stylesheet" href="/static/css/responsive.css">
+
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      corePlugins: {
+        preflight: false,
+      },
+      plugins: [
+        function({ addComponents }) {
+          addComponents({
+            '@media (max-width: 768px)': {
+              '.room-header': { height: '50px', padding: '0 12px' },
+              '.room-title-info': { gap: '8px' },
+              '.room-meeting-code': { fontSize: '12px', padding: '3px 8px' },
+              '.room-vpn-secure-badge': { display: 'none' },
+              '.room-clock': { fontSize: '12px' },
+              '.room-video-grid': { gridTemplateColumns: '1fr !important', gap: '8px', padding: '0', maxHeight: 'none' },
+              '.room-video-grid.grid-2': { gridTemplateColumns: '1fr 1fr !important' },
+              '.room-main-area': { padding: '8px', gap: '8px' },
+              '.room-chat-panel, .room-participants-panel': {
+                position: 'fixed',
+                bottom: '0',
+                left: '0',
+                right: '0',
+                top: 'auto',
+                width: '100% !important',
+                maxWidth: '100% !important',
+                height: '60vh',
+                borderRadius: '16px 16px 0 0',
+                zIndex: '200',
+                transform: 'translateY(100%)',
+                transition: 'transform 0.3s ease',
+              },
+              '.room-chat-panel.open, .room-participants-panel.open': {
+                transform: 'translateY(0)',
+              },
+              '.room-controls-bar': { padding: '0 8px', gap: '6px', height: '64px' },
+              '.control-btn': { width: '44px', height: '44px', borderRadius: '12px' },
+              '.control-btn span, .control-btn-label': { display: 'none' },
+              '.btn-end-call': { padding: '10px 16px', fontSize: '13px' },
+              '.btn-end-call span': { display: 'none' },
+            },
+            '@media (max-width: 480px)': {
+              '.room-header': { height: '46px', padding: '0 8px' },
+              '.room-meeting-code': { fontSize: '11px' },
+              '.room-controls-bar': { gap: '4px', height: '58px' },
+              '.control-btn': { width: '40px', height: '40px' },
+              '.room-video-grid': { gap: '6px' },
+            }
+          });
+        }
+      ]
+    }
+  </script>
 </head>
 <body class="meet-room-body">
 
