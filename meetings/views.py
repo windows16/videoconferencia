@@ -94,79 +94,96 @@ def register_view(request):
         
     form = RegisterForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
-        first_name = form.cleaned_data.get('first_name', '')
-        last_name = form.cleaned_data.get('last_name', '')
-        username = form.cleaned_data.get('username', '')
-        email = form.cleaned_data.get('email', '')
+        first_name = form.cleaned_data.get('first_name', '').strip()
+        last_name = form.cleaned_data.get('last_name', '').strip()
+        email = form.cleaned_data.get('email', '').strip().lower()
         password = form.cleaned_data.get('password', '')
 
-        if is_supabase_enabled():
-            sb_data, error_msg = supabase_sign_up(
-                email=email,
-                password=password,
-                user_metadata={
-                    'first_name': first_name,
-                    'last_name': last_name,
-                    'username': username
-                }
-            )
-
-            if sb_data:
-                django_user = sync_supabase_user_to_django(
+        try:
+            if is_supabase_enabled():
+                sb_data, error_msg = supabase_sign_up(
                     email=email,
-                    first_name=first_name,
-                    last_name=last_name,
-                    username=username,
-                    supabase_id=sb_data.get('id')
+                    password=password,
+                    user_metadata={
+                        'first_name': first_name,
+                        'last_name': last_name,
+                        'email': email
+                    }
                 )
-                
-                # Crear contactos iniciales si es nuevo
-                if not CallContact.objects.filter(owner=django_user).exists():
+
+                if sb_data and (sb_data.get('user') or sb_data.get('id')):
+                    sb_user = sb_data.get('user')
+                    sb_id = sb_data.get('id') or (str(sb_user.id) if sb_user else None)
+                    
+                    django_user = sync_supabase_user_to_django(
+                        email=email,
+                        first_name=first_name,
+                        last_name=last_name,
+                        supabase_id=sb_id
+                    )
+                    
+                    if not CallContact.objects.filter(owner=django_user).exists():
+                        CallContact.objects.create(
+                            owner=django_user,
+                            name='Ing. Telecomunicaciones',
+                            email='soporte.telecom@umg.edu.gt',
+                            status='Disponible',
+                            avatar_color='#1a73e8'
+                        )
+                        CallContact.objects.create(
+                            owner=django_user,
+                            name='Administrador VPN',
+                            email='vpn-admin@telecom.internal',
+                            status='En línea',
+                            avatar_color='#0d652d'
+                        )
+                    
+                    if sb_data.get('session') and hasattr(sb_data['session'], 'access_token'):
+                        request.session['supabase_access_token'] = sb_data['session'].access_token
+                    
+                    login(request, django_user)
+                    return redirect('dashboard')
+                else:
+                    form.add_error(None, error_msg or 'No se pudo completar el registro en Supabase.')
+            else:
+                # Registro local en base de datos Django
+                if User.objects.filter(email=email).exists():
+                    form.add_error('email', 'Este correo electrónico ya está registrado.')
+                else:
+                    username = email.split('@')[0]
+                    base_username = username
+                    counter = 1
+                    while User.objects.filter(username=username).exists():
+                        username = f"{base_username}_{counter}"
+                        counter += 1
+
+                    user = User.objects.create_user(
+                        username=username,
+                        email=email,
+                        password=password,
+                        first_name=first_name,
+                        last_name=last_name
+                    )
+                    
                     CallContact.objects.create(
-                        owner=django_user,
+                        owner=user,
                         name='Ing. Telecomunicaciones',
                         email='soporte.telecom@umg.edu.gt',
                         status='Disponible',
                         avatar_color='#1a73e8'
                     )
                     CallContact.objects.create(
-                        owner=django_user,
+                        owner=user,
                         name='Administrador VPN',
                         email='vpn-admin@telecom.internal',
                         status='En línea',
                         avatar_color='#0d652d'
                     )
-                
-                if sb_data.get('session'):
-                    request.session['supabase_access_token'] = sb_data['session'].get('access_token')
-                
-                login(request, django_user)
-                return redirect('dashboard')
-            else:
-                form.add_error(None, error_msg or 'Error al registrarse en Supabase.')
-        else:
-            # Fallback a registro local Django
-            user = form.save(commit=False)
-            user.set_password(password)
-            user.save()
-            
-            CallContact.objects.create(
-                owner=user,
-                name='Ing. Telecomunicaciones',
-                email='soporte.telecom@umg.edu.gt',
-                status='Disponible',
-                avatar_color='#1a73e8'
-            )
-            CallContact.objects.create(
-                owner=user,
-                name='Administrador VPN',
-                email='vpn-admin@telecom.internal',
-                status='En línea',
-                avatar_color='#0d652d'
-            )
-            
-            login(request, user)
-            return redirect('dashboard')
+                    
+                    login(request, user)
+                    return redirect('dashboard')
+        except Exception as e:
+            form.add_error(None, f'Error durante el registro: {str(e)}')
         
     return render(request, 'auth/register.html', {
         'form': form,

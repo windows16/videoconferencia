@@ -23,36 +23,34 @@ class LoginForm(forms.Form):
         label='Contraseña'
     )
 
-class RegisterForm(forms.ModelForm):
+class RegisterForm(forms.Form):
     first_name = forms.CharField(
         max_length=50,
         required=True,
-        widget=forms.TextInput(attrs={'class': 'form-control-meet', 'placeholder': 'Nombre'})
+        widget=forms.TextInput(attrs={'class': 'form-control-meet', 'placeholder': 'Nombre'}),
+        label='Nombre'
     )
     last_name = forms.CharField(
         max_length=50,
         required=True,
-        widget=forms.TextInput(attrs={'class': 'form-control-meet', 'placeholder': 'Apellidos'})
+        widget=forms.TextInput(attrs={'class': 'form-control-meet', 'placeholder': 'Apellidos'}),
+        label='Apellidos'
     )
     email = forms.EmailField(
         required=True,
-        widget=forms.EmailInput(attrs={'class': 'form-control-meet', 'placeholder': 'correo@ejemplo.com'})
+        widget=forms.EmailInput(attrs={'class': 'form-control-meet', 'placeholder': 'correo@ejemplo.com'}),
+        label='Correo Electrónico'
     )
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={'class': 'form-control-meet', 'placeholder': 'Contraseña segura'}),
-        min_length=6
+        min_length=6,
+        label='Contraseña'
     )
     password_confirm = forms.CharField(
         widget=forms.PasswordInput(attrs={'class': 'form-control-meet', 'placeholder': 'Confirma tu contraseña'}),
-        min_length=6
+        min_length=6,
+        label='Confirmar Contraseña'
     )
-
-    class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'email']
-        widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control-meet', 'placeholder': 'Nombre de usuario'}),
-        }
 
     def clean(self):
         cleaned_data = super().clean()

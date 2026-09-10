@@ -138,6 +138,20 @@ class MeetingPlatformTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('dashboard'))
 
+    def test_register_view_simplified(self):
+        """Verifica el flujo de registro simplificado con nombre, apellido, correo y contraseña."""
+        response = self.client.post(reverse('register'), {
+            'first_name': 'Ana',
+            'last_name': 'Lopez',
+            'email': 'ana.lopez@telecom.umg.edu.gt',
+            'password': 'StrongPassword123!',
+            'password_confirm': 'StrongPassword123!'
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('dashboard'))
+        self.assertTrue(User.objects.filter(email='ana.lopez@telecom.umg.edu.gt').exists())
+
+
 
 
 
