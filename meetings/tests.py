@@ -115,3 +115,18 @@ class MeetingPlatformTests(TestCase):
         self.assertEqual(participant['peer_id'], 'telemeet-test-peer-1')
         self.assertTrue(participant['is_hand_raised'])
 
+    def test_sync_supabase_user_to_django(self):
+        """Verifica que la función sync_supabase_user_to_django cree y actualice usuarios correctamente."""
+        from .supabase_auth import sync_supabase_user_to_django
+        user = sync_supabase_user_to_django(
+            email='nuevo.supabase@telecom.umg.edu.gt',
+            first_name='Carlos',
+            last_name='Mendoza',
+            username='carlos_m'
+        )
+        self.assertIsNotNone(user)
+        self.assertEqual(user.email, 'nuevo.supabase@telecom.umg.edu.gt')
+        self.assertEqual(user.first_name, 'Carlos')
+        self.assertEqual(user.last_name, 'Mendoza')
+
+

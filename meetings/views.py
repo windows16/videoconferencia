@@ -15,9 +15,13 @@ from .models import (
 )
 from .forms import LoginForm, RegisterForm, ScheduleMeetingForm
 from .vpn_service import check_vpn_connectivity
+from .supabase_auth import (
+    is_supabase_enabled, supabase_sign_in, supabase_sign_up,
+    supabase_sign_out, sync_supabase_user_to_django
+)
 
 # ==========================================
-# Vistas de Autenticación
+# Vistas de Autenticación (Supabase + Django)
 # ==========================================
 
 def login_view(request):
@@ -31,25 +35,59 @@ def login_view(request):
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
         
-        # Intentar autenticar por username o por email
-        user = authenticate(request, username=username, password=password)
-        if not user:
-            try:
-                user_obj = User.objects.get(email=username)
-                user = authenticate(request, username=user_obj.username, password=password)
-            except User.DoesNotExist:
-                user = None
+        # Modo Supabase si está configurado
+        if is_supabase_enabled():
+            email = username
+            if '@' not in username:
+                try:
+                    local_user = User.objects.get(username=username)
+                    if local_user.email:
+                        email = local_user.email
+                except User.DoesNotExist:
+                    pass
+
+            session_data, error_msg = supabase_signin(email, password)
+            if session_data and 'access_token' in session_data:
+                sb_user = session_data.get('user', {})
+                sb_meta = sb_user.get('user_metadata', {})
+                sb_email = sb_user.get('email', email)
                 
-        if user is not None:
-            login(request, user)
-            next_url = request.GET.get('next') or 'dashboard'
-            return redirect(next_url)
+                django_user = sync_supabase_user_to_django(
+                    email=sb_email,
+                    first_name=sb_meta.get('first_name', ''),
+                    last_name=sb_meta.get('last_name', ''),
+                    username=sb_meta.get('username') or username,
+                    supabase_id=sb_user.get('id')
+                )
+                
+                request.session['supabase_access_token'] = session_data.get('access_token')
+                request.session['supabase_refresh_token'] = session_data.get('refresh_token')
+                login(request, django_user)
+                next_url = request.GET.get('next') or 'dashboard'
+                return redirect(next_url)
+            else:
+                error_message = error_msg or 'Usuario o contraseña incorrectos en Supabase.'
         else:
-            error_message = 'Usuario o contraseña incorrectos. Verifica tus credenciales.'
+            # Fallback a autenticación Django local
+            user = authenticate(request, username=username, password=password)
+            if not user:
+                try:
+                    user_obj = User.objects.get(email=username)
+                    user = authenticate(request, username=user_obj.username, password=password)
+                except User.DoesNotExist:
+                    user = None
+                    
+            if user is not None:
+                login(request, user)
+                next_url = request.GET.get('next') or 'dashboard'
+                return redirect(next_url)
+            else:
+                error_message = 'Usuario o contraseña incorrectos. Verifica tus credenciales.'
             
     return render(request, 'auth/login.html', {
         'form': form,
-        'error_message': error_message
+        'error_message': error_message,
+        'supabase_enabled': is_supabase_enabled()
     })
 
 def register_view(request):
@@ -58,32 +96,89 @@ def register_view(request):
         
     form = RegisterForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
-        user = form.save(commit=False)
-        user.set_password(form.cleaned_data['password'])
-        user.save()
+        first_name = form.cleaned_data.get('first_name', '')
+        last_name = form.cleaned_data.get('last_name', '')
+        username = form.cleaned_data.get('username', '')
+        email = form.cleaned_data.get('email', '')
+        password = form.cleaned_data.get('password', '')
+
+        if is_supabase_enabled():
+            sb_data, error_msg = supabase_sign_up(
+                email=email,
+                password=password,
+                user_metadata={
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'username': username
+                }
+            )
+
+            if sb_data:
+                django_user = sync_supabase_user_to_django(
+                    email=email,
+                    first_name=first_name,
+                    last_name=last_name,
+                    username=username,
+                    supabase_id=sb_data.get('id')
+                )
+                
+                # Crear contactos iniciales si es nuevo
+                if not CallContact.objects.filter(owner=django_user).exists():
+                    CallContact.objects.create(
+                        owner=django_user,
+                        name='Ing. Telecomunicaciones',
+                        email='soporte.telecom@umg.edu.gt',
+                        status='Disponible',
+                        avatar_color='#1a73e8'
+                    )
+                    CallContact.objects.create(
+                        owner=django_user,
+                        name='Administrador VPN',
+                        email='vpn-admin@telecom.internal',
+                        status='En línea',
+                        avatar_color='#0d652d'
+                    )
+                
+                if sb_data.get('session'):
+                    request.session['supabase_access_token'] = sb_data['session'].get('access_token')
+                
+                login(request, django_user)
+                return redirect('dashboard')
+            else:
+                form.add_error(None, error_msg or 'Error al registrarse en Supabase.')
+        else:
+            # Fallback a registro local Django
+            user = form.save(commit=False)
+            user.set_password(password)
+            user.save()
+            
+            CallContact.objects.create(
+                owner=user,
+                name='Ing. Telecomunicaciones',
+                email='soporte.telecom@umg.edu.gt',
+                status='Disponible',
+                avatar_color='#1a73e8'
+            )
+            CallContact.objects.create(
+                owner=user,
+                name='Administrador VPN',
+                email='vpn-admin@telecom.internal',
+                status='En línea',
+                avatar_color='#0d652d'
+            )
+            
+            login(request, user)
+            return redirect('dashboard')
         
-        # Crear algunos contactos de muestra para la pestaña de llamadas
-        CallContact.objects.create(
-            owner=user,
-            name='Ing. Telecomunicaciones',
-            email='soporte.telecom@umg.edu.gt',
-            status='Disponible',
-            avatar_color='#1a73e8'
-        )
-        CallContact.objects.create(
-            owner=user,
-            name='Administrador VPN',
-            email='vpn-admin@telecom.internal',
-            status='En línea',
-            avatar_color='#0d652d'
-        )
-        
-        login(request, user)
-        return redirect('dashboard')
-        
-    return render(request, 'auth/register.html', {'form': form})
+    return render(request, 'auth/register.html', {
+        'form': form,
+        'supabase_enabled': is_supabase_enabled()
+    })
 
 def logout_view(request):
+    token = request.session.get('supabase_access_token')
+    if token:
+        supabase_sign_out(token)
     logout(request)
     return redirect('login')
 

@@ -130,3 +130,9 @@ VPN_SERVER_PORT = int(os.environ.get('VPN_SERVER_PORT', 443))
 VPN_SERVER_NAME = os.environ.get('VPN_SERVER_NAME', 'Telecom-Secure-Server')
 VPN_ENFORCE = os.environ.get('VPN_ENFORCE', 'False').lower() in ('true', '1', 't')
 
+# Configuración de Supabase Authentication
+SUPABASE_URL = os.environ.get('SUPABASE_URL', '')
+SUPABASE_ANON_KEY = os.environ.get('SUPABASE_ANON_KEY', '')
+SUPABASE_SERVICE_ROLE_KEY = os.environ.get('SUPABASE_SERVICE_ROLE_KEY', '')
+
+
