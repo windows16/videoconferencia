@@ -33,12 +33,12 @@
       <form method="POST">
         {% csrf_token %}
         <div class="form-group-meet">
-          <label class="form-label-meet">Usuario o Correo Institucional</label>
-          {{ form.username }}
+          <label class="form-label-meet">Correo Electrónico</label>
+          {{ form.email }}
         </div>
 
         <div class="form-group-meet">
-          <label class="form-label-meet">Contraseña de Acceso</label>
+          <label class="form-label-meet">Contraseña</label>
           {{ form.password }}
         </div>
 

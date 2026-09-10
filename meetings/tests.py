@@ -129,4 +129,15 @@ class MeetingPlatformTests(TestCase):
         self.assertEqual(user.first_name, 'Carlos')
         self.assertEqual(user.last_name, 'Mendoza')
 
+    def test_login_view_with_email_and_password(self):
+        """Verifica que el login_view acepte email y contraseña."""
+        response = self.client.post(reverse('login'), {
+            'email': 'sara@telecom.umg.edu.gt',
+            'password': 'TestPassword123!'
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('dashboard'))
+
+
+
 

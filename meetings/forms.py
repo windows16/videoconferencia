@@ -4,14 +4,14 @@ from .models import Meeting
 import datetime
 
 class LoginForm(forms.Form):
-    username = forms.CharField(
-        widget=forms.TextInput(attrs={
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
             'class': 'form-control-meet',
-            'placeholder': 'Correo electrónico o usuario',
-            'autocomplete': 'username',
+            'placeholder': 'correo@ejemplo.com',
+            'autocomplete': 'email',
             'required': 'true'
         }),
-        label='Usuario o Correo'
+        label='Correo Electrónico'
     )
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={

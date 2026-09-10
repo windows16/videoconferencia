@@ -1,136 +1,127 @@
 """
-Supabase Authentication Service for TeleConnect.
-Provee integración completa con la API REST de Supabase Auth (GoTrue),
-sincronizando los usuarios autenticados con los modelos de Django.
+Supabase Authentication Service for TeleConnect (usando cliente oficial supabase-py).
 """
 import os
-import requests
 from django.conf import settings
 from django.contrib.auth.models import User
+from supabase import create_client, Client
 
 
 def get_supabase_config():
-    """Obtiene la configuración de Supabase desde settings o variables de entorno."""
+    """Obtiene la URL y anon key de Supabase desde settings o variables de entorno."""
     url = getattr(settings, 'SUPABASE_URL', '') or os.environ.get('SUPABASE_URL', '')
     anon_key = getattr(settings, 'SUPABASE_ANON_KEY', '') or os.environ.get('SUPABASE_ANON_KEY', '')
-    url = url.strip().rstrip('/')
-    anon_key = anon_key.strip()
-    return url, anon_key
+    return url.strip().rstrip('/'), anon_key.strip()
 
 
 def is_supabase_enabled():
-    """Verifica si Supabase está configurado con URL y anon_key válidas."""
+    """Verifica si Supabase está configurado."""
     url, anon_key = get_supabase_config()
     return bool(url and anon_key)
 
 
-def get_supabase_headers(access_token=None):
-    """Genera las cabeceras HTTP necesarias para llamar a Supabase Auth."""
+def get_supabase_client() -> Client:
+    """Instancia el cliente oficial de Supabase."""
     url, anon_key = get_supabase_config()
-    headers = {
-        'apikey': anon_key,
-        'Content-Type': 'application/json',
-    }
-    if access_token:
-        headers['Authorization'] = f'Bearer {access_token}'
-    else:
-        headers['Authorization'] = f'Bearer {anon_key}'
-    return headers
+    if not (url and anon_key):
+        return None
+    return create_client(url, anon_key)
 
 
 def supabase_sign_up(email, password, user_metadata=None):
     """
-    Registra un nuevo usuario en Supabase Auth.
+    Registra un usuario en Supabase usando el cliente oficial.
     Retorna: (data_dict, error_string)
     """
-    url, anon_key = get_supabase_config()
-    if not is_supabase_enabled():
+    client = get_supabase_client()
+    if not client:
         return None, "Supabase no está configurado (falta SUPABASE_URL o SUPABASE_ANON_KEY)."
 
-    endpoint = f"{url}/auth/v1/signup"
-    payload = {
-        'email': email,
-        'password': password,
-    }
-    if user_metadata:
-        payload['data'] = user_metadata
-
     try:
-        response = requests.post(
-            endpoint,
-            headers=get_supabase_headers(),
-            json=payload,
-            timeout=10
-        )
-        data = response.json()
-        if response.status_code in (200, 201):
-            return data, None
-        else:
-            error_msg = data.get('msg') or data.get('error_description') or data.get('message') or str(data)
-            return None, error_msg
+        credentials = {
+            "email": email,
+            "password": password,
+        }
+        if user_metadata:
+            credentials["options"] = {"data": user_metadata}
+        
+        res = client.auth.sign_up(credentials)
+        if res and res.user:
+            return {
+                "user": res.user,
+                "session": res.session,
+                "id": str(res.user.id)
+            }, None
+        return None, "No se pudo completar el registro en Supabase."
     except Exception as e:
-        return None, f"Error de conexión con Supabase: {str(e)}"
+        msg = str(e)
+        # Limpiar mensaje si contiene detalles técnicos
+        if "Email rate limit exceeded" in msg:
+            msg = "Límite de correos alcanzado en Supabase. Intenta más tarde."
+        elif "User already registered" in msg:
+            msg = "El correo ya está registrado en Supabase."
+        elif "Password should be at least" in msg:
+            msg = "La contraseña debe tener al menos 6 caracteres."
+        return None, msg
 
 
 def supabase_sign_in(email, password):
     """
-    Inicia sesión de un usuario con correo y contraseña en Supabase Auth.
+    Inicia sesión con correo y contraseña usando el cliente oficial de Supabase.
     Retorna: (data_dict, error_string)
-    data_dict contendrá: access_token, refresh_token, user: {id, email, user_metadata...}
     """
-    url, anon_key = get_supabase_config()
-    if not is_supabase_enabled():
+    client = get_supabase_client()
+    if not client:
         return None, "Supabase no está configurado (falta SUPABASE_URL o SUPABASE_ANON_KEY)."
 
-    endpoint = f"{url}/auth/v1/token?grant_type=password"
-    payload = {
-        'email': email,
-        'password': password,
-    }
-
     try:
-        response = requests.post(
-            endpoint,
-            headers=get_supabase_headers(),
-            json=payload,
-            timeout=10
-        )
-        data = response.json()
-        if response.status_code == 200:
-            return data, None
-        else:
-            error_msg = data.get('error_description') or data.get('msg') or data.get('message') or 'Credenciales inválidas en Supabase.'
-            return None, error_msg
+        res = client.auth.sign_in_with_password({
+            "email": email,
+            "password": password
+        })
+        if res and res.user:
+            access_token = res.session.access_token if res.session else None
+            refresh_token = res.session.refresh_token if res.session else None
+            user_metadata = getattr(res.user, 'user_metadata', {}) or {}
+            
+            return {
+                "access_token": access_token,
+                "refresh_token": refresh_token,
+                "user": {
+                    "id": str(res.user.id),
+                    "email": res.user.email,
+                    "user_metadata": user_metadata
+                }
+            }, None
+        return None, "Credenciales inválidas en Supabase."
     except Exception as e:
-        return None, f"Error de conexión con Supabase: {str(e)}"
+        msg = str(e)
+        if "Invalid login credentials" in msg:
+            msg = "Correo o contraseña incorrectos en Supabase."
+        elif "Email not confirmed" in msg:
+            msg = "El correo electrónico no ha sido confirmado en Supabase."
+        return None, msg
 
 
-def supabase_sign_out(access_token):
-    """Cierra la sesión del token en Supabase Auth."""
-    url, anon_key = get_supabase_config()
-    if not is_supabase_enabled() or not access_token:
+def supabase_sign_out(access_token=None):
+    """Cierra la sesión usando el cliente de Supabase."""
+    client = get_supabase_client()
+    if not client:
         return
-
-    endpoint = f"{url}/auth/v1/logout"
     try:
-        requests.post(
-            endpoint,
-            headers=get_supabase_headers(access_token=access_token),
-            timeout=5
-        )
+        client.auth.sign_out()
     except Exception:
         pass
 
 
 def sync_supabase_user_to_django(email, first_name='', last_name='', username=None, supabase_id=None):
     """
-    Garantiza que exista un usuario local en Django para la sesión actual,
-    sincronizando los datos recibidos de Supabase.
+    Crea o actualiza el usuario local de Django para mantener la sesión activa
+    y compatibilidad con las reuniones, chat y permisos.
     """
     if not username:
         username = email.split('@')[0]
 
-    # Asegurar username único
     base_username = username
     counter = 1
     while True:
@@ -149,7 +140,6 @@ def sync_supabase_user_to_django(email, first_name='', last_name='', username=No
         }
     )
 
-    # Actualizar nombres si vienen en los metadatos de Supabase
     updated = False
     if first_name and user.first_name != first_name:
         user.first_name = first_name

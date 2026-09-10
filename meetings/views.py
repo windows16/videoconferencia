@@ -32,57 +32,55 @@ def login_view(request):
     error_message = None
     
     if request.method == 'POST' and form.is_valid():
-        username = form.cleaned_data['username']
+        email = form.cleaned_data['email'].strip().lower()
         password = form.cleaned_data['password']
         
-        # Modo Supabase si está configurado
-        if is_supabase_enabled():
-            email = username
-            if '@' not in username:
-                try:
-                    local_user = User.objects.get(username=username)
-                    if local_user.email:
-                        email = local_user.email
-                except User.DoesNotExist:
-                    pass
-
-            session_data, error_msg = supabase_signin(email, password)
-            if session_data and 'access_token' in session_data:
-                sb_user = session_data.get('user', {})
-                sb_meta = sb_user.get('user_metadata', {})
-                sb_email = sb_user.get('email', email)
-                
-                django_user = sync_supabase_user_to_django(
-                    email=sb_email,
-                    first_name=sb_meta.get('first_name', ''),
-                    last_name=sb_meta.get('last_name', ''),
-                    username=sb_meta.get('username') or username,
-                    supabase_id=sb_user.get('id')
-                )
-                
-                request.session['supabase_access_token'] = session_data.get('access_token')
-                request.session['supabase_refresh_token'] = session_data.get('refresh_token')
-                login(request, django_user)
-                next_url = request.GET.get('next') or 'dashboard'
-                return redirect(next_url)
+        try:
+            # Modo Supabase con cliente oficial
+            if is_supabase_enabled():
+                session_data, error_msg = supabase_sign_in(email, password)
+                if session_data and session_data.get('user'):
+                    sb_user = session_data['user']
+                    sb_meta = sb_user.get('user_metadata', {})
+                    sb_email = sb_user.get('email', email)
+                    
+                    django_user = sync_supabase_user_to_django(
+                        email=sb_email,
+                        first_name=sb_meta.get('first_name', ''),
+                        last_name=sb_meta.get('last_name', ''),
+                        username=sb_meta.get('username') or sb_email.split('@')[0],
+                        supabase_id=sb_user.get('id')
+                    )
+                    
+                    if session_data.get('access_token'):
+                        request.session['supabase_access_token'] = session_data['access_token']
+                    if session_data.get('refresh_token'):
+                        request.session['supabase_refresh_token'] = session_data['refresh_token']
+                    
+                    login(request, django_user)
+                    next_url = request.GET.get('next') or 'dashboard'
+                    return redirect(next_url)
+                else:
+                    error_message = error_msg or 'Correo o contraseña incorrectos en Supabase.'
             else:
-                error_message = error_msg or 'Usuario o contraseña incorrectos en Supabase.'
-        else:
-            # Fallback a autenticación Django local
-            user = authenticate(request, username=username, password=password)
-            if not user:
+                # Modo local Django (por email o username)
+                user = None
                 try:
-                    user_obj = User.objects.get(email=username)
+                    user_obj = User.objects.get(email=email)
                     user = authenticate(request, username=user_obj.username, password=password)
                 except User.DoesNotExist:
+                    user = authenticate(request, username=email, password=password)
+                except Exception:
                     user = None
                     
-            if user is not None:
-                login(request, user)
-                next_url = request.GET.get('next') or 'dashboard'
-                return redirect(next_url)
-            else:
-                error_message = 'Usuario o contraseña incorrectos. Verifica tus credenciales.'
+                if user is not None:
+                    login(request, user)
+                    next_url = request.GET.get('next') or 'dashboard'
+                    return redirect(next_url)
+                else:
+                    error_message = 'Correo o contraseña incorrectos. Verifica tus credenciales.'
+        except Exception as e:
+            error_message = f'Error al iniciar sesión: {str(e)}'
             
     return render(request, 'auth/login.html', {
         'form': form,
