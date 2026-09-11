@@ -3,7 +3,7 @@
 {% block title %}TeleConnect - Llamadas Directas{% endblock %}
 
 {% block content %}
-<div style="max-width: 860px; margin: 0 auto;">
+<div class="calls-page" style="max-width: 860px; margin: 0 auto;">
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
     <div>
       <h2 style="font-size: clamp(20px, 3vw, 24px); font-weight: 700; color: var(--navy-darker);">Directorio de Llamadas</h2>
@@ -19,20 +19,20 @@
 
   <!-- Directorio de Contactos -->
   <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: 18px; overflow: hidden; box-shadow: var(--shadow-sm);">
-    <div style="padding: 16px 24px; background: #f8fafc; border-bottom: 1px solid var(--border-light); font-weight: 700; font-size: 14px; color: var(--navy-primary); text-transform: uppercase; letter-spacing: 0.5px;">
+    <div class="calls-directory-heading" style="padding: 16px 24px; background: #f8fafc; border-bottom: 1px solid var(--border-light); font-weight: 700; font-size: 14px; color: var(--navy-primary); text-transform: uppercase; letter-spacing: 0.5px;">
       Contactos de Red y Telecomunicaciones
     </div>
 
     <div style="display: flex; flex-direction: column;">
       {% for contact in contacts %}
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 md:px-6 md:py-4 border-b border-slate-100 hover:bg-slate-50 transition">
+      <div class="calls-contact-row flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 md:px-6 md:py-4 border-b border-slate-100 hover:bg-slate-50 transition">
         <div class="flex items-center gap-4">
           <div style="width: 46px; height: 46px; border-radius: 12px; background: linear-gradient(135deg, #0c1b33, #1e40af); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; box-shadow: 0 2px 6px rgba(12, 27, 51, 0.2); flex-shrink: 0;">
             {{ contact.name|first|upper }}
           </div>
           <div>
-            <div style="font-weight: 600; font-size: 15px; color: var(--navy-darker);">{{ contact.name }}</div>
-            <div style="font-size: 13px; color: var(--text-muted); word-break: break-all;">{{ contact.email }}</div>
+            <div class="calls-contact-name" style="font-weight: 600; font-size: 15px; color: var(--navy-darker);">{{ contact.name }}</div>
+            <div class="calls-contact-email" style="font-size: 13px; color: var(--text-muted); word-break: break-all;">{{ contact.email }}</div>
           </div>
         </div>
 
@@ -40,7 +40,7 @@
           <span class="vpn-status-badge badge-vpn-connected" style="font-size: 11px;">
             ● {{ contact.status }}
           </span>
-          <button type="button" class="btn-card-start" style="padding: 8px 16px;" onclick="document.getElementById('actionInstant').click();">
+          <button type="button" class="calls-connect-button btn-card-start" style="padding: 8px 16px;" onclick="document.getElementById('actionInstant').click();">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polygon points="23 7 16 12 23 17 23 7"></polygon>
               <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>

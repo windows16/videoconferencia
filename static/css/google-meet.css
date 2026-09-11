@@ -692,6 +692,48 @@ body {
   color: var(--navy-primary);
 }
 
+/* Calls conserva controles legibles y táctiles en pantallas pequeñas. */
+@media (max-width: 639px) {
+  .calls-page {
+    width: 100%;
+  }
+
+  .calls-page > div:first-child {
+    align-items: stretch;
+  }
+
+  .calls-page > div:first-child > .btn-card-start {
+    align-self: stretch;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  .calls-directory-heading {
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .calls-contact-row {
+    padding: 16px;
+  }
+
+  .calls-contact-name {
+    font-size: 16px !important;
+  }
+
+  .calls-contact-email {
+    font-size: 14px !important;
+  }
+
+  .calls-connect-button {
+    min-height: 44px;
+    flex: 1;
+    justify-content: center;
+    font-size: 14px;
+  }
+}
+
 /* --------------------------------------------------------------------------
    Modal de Configuración (Audio / Video) - Estilo Navy Elegante
    -------------------------------------------------------------------------- */
