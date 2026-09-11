@@ -90,17 +90,36 @@
 {% block extra_js %}
 <script>
   let prejoinStream = null;
-  let micMuted = false;
-  let camOff = false;
+  let micMuted = sessionStorage.getItem('telemeet_prejoin_mic_muted') === 'true';
+  let camOff = sessionStorage.getItem('telemeet_prejoin_cam_off') === 'true';
 
   async function initPrejoinMedia() {
+    const savedMic = localStorage.getItem('telemeet_mic');
+    const savedCam = localStorage.getItem('telemeet_cam');
+    const constraints = {
+      video: savedCam ? { deviceId: { exact: savedCam } } : true,
+      audio: savedMic ? { deviceId: { exact: savedMic } } : true
+    };
+
     try {
-      prejoinStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      prejoinStream = await navigator.mediaDevices.getUserMedia(constraints);
       const videoEl = document.getElementById('prejoinVideo');
       if (videoEl) videoEl.srcObject = prejoinStream;
+      applyPrejoinState();
     } catch (e) {
       console.warn("No se pudo iniciar cámara/micrófono en pre-join:", e);
-      togglePrejoinCam();
+      try {
+        prejoinStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        const videoEl = document.getElementById('prejoinVideo');
+        if (videoEl) videoEl.srcObject = prejoinStream;
+        applyPrejoinState();
+      } catch (fallbackError) {
+        console.warn("No se pudo iniciar el dispositivo predeterminado:", fallbackError);
+        camOff = true;
+        micMuted = true;
+        persistPrejoinState();
+        updatePrejoinControls();
+      }
     }
   }
 
@@ -108,32 +127,50 @@
   const btnCam = document.getElementById('btnPrejoinCam');
 
   function togglePrejoinMic() {
-    if (!prejoinStream) return;
-    const track = prejoinStream.getAudioTracks()[0];
-    if (track) {
-      micMuted = !micMuted;
-      track.enabled = !micMuted;
-      btnMic.classList.toggle('off', micMuted);
-    }
+    micMuted = !micMuted;
+    const track = prejoinStream && prejoinStream.getAudioTracks()[0];
+    if (track) track.enabled = !micMuted;
+    persistPrejoinState();
+    updatePrejoinControls();
   }
 
   function togglePrejoinCam() {
     const videoEl = document.getElementById('prejoinVideo');
     const avatarEl = document.getElementById('prejoinAvatar');
-    if (prejoinStream) {
-      const track = prejoinStream.getVideoTracks()[0];
-      if (track) {
-        camOff = !camOff;
-        track.enabled = !camOff;
-      }
-    } else {
-      camOff = true;
-    }
-    btnCam.classList.toggle('off', camOff);
+    camOff = !camOff;
+    const track = prejoinStream && prejoinStream.getVideoTracks()[0];
+    if (track) track.enabled = !camOff;
+    persistPrejoinState();
+    updatePrejoinControls();
     if (videoEl && avatarEl) {
       videoEl.style.display = camOff ? 'none' : 'block';
       avatarEl.style.display = camOff ? 'flex' : 'none';
     }
+  }
+
+  function persistPrejoinState() {
+    sessionStorage.setItem('telemeet_prejoin_mic_muted', String(micMuted));
+    sessionStorage.setItem('telemeet_prejoin_cam_off', String(camOff));
+  }
+
+  function updatePrejoinControls() {
+    if (btnMic) btnMic.classList.toggle('off', micMuted);
+    if (btnCam) btnCam.classList.toggle('off', camOff);
+    const videoEl = document.getElementById('prejoinVideo');
+    const avatarEl = document.getElementById('prejoinAvatar');
+    if (videoEl && avatarEl) {
+      videoEl.style.display = camOff ? 'none' : 'block';
+      avatarEl.style.display = camOff ? 'flex' : 'none';
+    }
+  }
+
+  function applyPrejoinState() {
+    const audioTrack = prejoinStream && prejoinStream.getAudioTracks()[0];
+    const videoTrack = prejoinStream && prejoinStream.getVideoTracks()[0];
+    if (audioTrack) audioTrack.enabled = !micMuted;
+    if (videoTrack) videoTrack.enabled = !camOff;
+    persistPrejoinState();
+    updatePrejoinControls();
   }
 
   if (btnMic) btnMic.addEventListener('click', togglePrejoinMic);

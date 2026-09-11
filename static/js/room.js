@@ -134,44 +134,71 @@ class MeetingRoom {
   }
 
   async startMedia() {
-    try {
-      const constraints = {
-        video: { width: { ideal: 1280 }, height: { ideal: 720 } },
-        audio: true
-      };
+    const savedMic = localStorage.getItem('telemeet_mic');
+    const savedCam = localStorage.getItem('telemeet_cam');
+    this.isMuted = sessionStorage.getItem('telemeet_prejoin_mic_muted') === 'true';
+    this.isVideoOff = sessionStorage.getItem('telemeet_prejoin_cam_off') === 'true';
 
+    const constraints = {
+      video: savedCam ? { deviceId: { exact: savedCam } } : { width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: savedMic ? { deviceId: { exact: savedMic } } : true
+    };
+
+    try {
       this.localStream = await navigator.mediaDevices.getUserMedia(constraints);
+      this.applyInitialMediaState();
       if (this.localVideo) {
         this.localVideo.srcObject = this.localStream;
-        this.localVideo.style.display = 'block';
+        this.localVideo.style.display = this.isVideoOff ? 'none' : 'block';
       }
       if (this.localAvatar) {
-        this.localAvatar.style.display = 'none';
+        this.localAvatar.style.display = this.isVideoOff ? 'flex' : 'none';
       }
+      this.updateControlState();
     } catch (err) {
       console.warn("No se pudo iniciar video/audio local:", err);
-      // Crear stream dummy o continuar con video apagado
-      if (this.localVideo) this.localVideo.style.display = 'none';
-      if (this.localAvatar) this.localAvatar.style.display = 'flex';
-      this.isVideoOff = true;
-      if (this.btnCam) this.btnCam.classList.add('off');
-
-      // Intentar al menos obtener audio si la cámara falló
       try {
-        this.localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      } catch (audioErr) {
-        console.warn("Tampoco se pudo capturar audio:", audioErr);
-        // Crear un AudioContext silencioso para que WebRTC no falle en negotiate
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const dst = osc.connect(ctx.createMediaStreamDestination());
-        osc.start();
-        const silentTrack = dst.stream.getAudioTracks()[0];
-        silentTrack.enabled = false;
-        this.localStream = new MediaStream([silentTrack]);
-        this.isMuted = true;
+        this.localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        this.applyInitialMediaState();
+        if (this.localVideo) this.localVideo.srcObject = this.localStream;
+        if (this.localVideo) this.localVideo.style.display = this.isVideoOff ? 'none' : 'block';
+        if (this.localAvatar) this.localAvatar.style.display = this.isVideoOff ? 'flex' : 'none';
+        this.updateControlState();
+      } catch (fallbackErr) {
+        console.warn("Tampoco se pudo iniciar el dispositivo predeterminado:", fallbackErr);
+        if (this.localVideo) this.localVideo.style.display = 'none';
+        if (this.localAvatar) this.localAvatar.style.display = 'flex';
+        this.isVideoOff = true;
+        if (this.btnCam) this.btnCam.classList.add('off');
+
+        // Intentar al menos obtener audio si la cámara falló
+        try {
+          this.localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        } catch (audioErr) {
+          console.warn("Tampoco se pudo capturar audio:", audioErr);
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const osc = ctx.createOscillator();
+          const dst = osc.connect(ctx.createMediaStreamDestination());
+          osc.start();
+          const silentTrack = dst.stream.getAudioTracks()[0];
+          silentTrack.enabled = false;
+          this.localStream = new MediaStream([silentTrack]);
+          this.isMuted = true;
+        }
       }
     }
+  }
+
+  applyInitialMediaState() {
+    const audioTrack = this.localStream && this.localStream.getAudioTracks()[0];
+    const videoTrack = this.localStream && this.localStream.getVideoTracks()[0];
+    if (audioTrack) audioTrack.enabled = !this.isMuted;
+    if (videoTrack) videoTrack.enabled = !this.isVideoOff;
+  }
+
+  updateControlState() {
+    if (this.btnMic) this.btnMic.classList.toggle('off', this.isMuted);
+    if (this.btnCam) this.btnCam.classList.toggle('off', this.isVideoOff);
   }
 
   /* ==========================================================================
@@ -778,4 +805,3 @@ class MeetingRoom {
 }
 
 window.MeetingRoom = MeetingRoom;
-
