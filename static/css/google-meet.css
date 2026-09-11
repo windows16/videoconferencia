@@ -351,6 +351,8 @@ body {
 /* Área Principal */
 .meet-main-content {
   flex: 1;
+  width: 100%;
+  min-width: 0;
   padding: 28px 44px 48px 44px;
   max-width: 1320px;
   margin: 0 auto;
@@ -392,6 +394,7 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
+  min-width: 0;
   background: var(--navy-subtle-bg);
   padding: 4px 8px;
   border-radius: 14px;
@@ -484,12 +487,14 @@ body {
   margin-bottom: 30px;
   background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
   box-shadow: var(--shadow-sm);
+  min-width: 0;
 }
 
 .banner-left {
   display: flex;
   align-items: center;
   gap: 16px;
+  min-width: 0;
 }
 
 .banner-icon {
@@ -508,11 +513,13 @@ body {
   font-size: 15px;
   font-weight: 700;
   color: #1e3a8a;
+  overflow-wrap: anywhere;
 }
 
 .banner-text-desc {
   font-size: 13px;
   color: #334155;
+  overflow-wrap: anywhere;
 }
 
 .banner-btn-link {
@@ -586,6 +593,8 @@ body {
   box-shadow: var(--shadow-sm);
   transition: all 0.2s ease;
   border-top: 4px solid var(--navy-primary);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .meeting-card:hover {
@@ -636,6 +645,7 @@ body {
   margin-top: 14px;
   padding-top: 14px;
   border-top: 1px solid var(--border-light);
+  min-width: 0;
 }
 
 .btn-card-start {
@@ -649,6 +659,7 @@ body {
   cursor: pointer;
   text-decoration: none;
   display: inline-flex;
+  min-width: 0;
   align-items: center;
   gap: 8px;
   transition: all 0.15s;
@@ -669,6 +680,10 @@ body {
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.15s;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .btn-card-copy:hover {

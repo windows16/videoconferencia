@@ -49,7 +49,7 @@
               '.meet-main-content': { padding: '20px 24px 36px 24px' },
               '.meetings-grid': { gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' },
             },
-            '@media (max-width: 768px)': {
+            '@media (max-width: 639px)': {
               '.meet-header': { padding: '0 12px', height: '56px', flexWrap: 'nowrap', gap: '6px' },
               '.meet-logo-text': { display: 'none' },
               '.meet-header-center': { flex: '1', margin: '0 6px', minWidth: '0', gap: '6px' },
@@ -76,16 +76,18 @@
               },
               '.sidebar-nav-item': { flexDirection: 'row', gap: '6px', width: 'auto', padding: '0 12px', fontSize: '12px' },
               '.sidebar-icon-wrapper': { width: '36px', height: '36px' },
-              '.meet-main-content': { padding: '16px 16px 80px 16px' },
-              '.meet-calendar-top-bar': { flexDirection: 'column', alignItems: 'flex-start', gap: '12px', padding: '12px 16px' },
+              '.meet-main-content': { padding: '16px 16px 80px 16px', width: '100%', minWidth: '0' },
+              '.meet-calendar-top-bar': { flexDirection: 'column', alignItems: 'stretch', gap: '12px', padding: '12px 16px', width: '100%', minWidth: '0' },
               '.current-date-heading': { fontSize: '16px' },
-              '.week-navigation-container': { width: '100%', overflowX: 'auto', padding: '4px' },
+              '.week-navigation-container': { width: '100%', maxWidth: '100%', overflowX: 'auto', padding: '4px' },
               '.week-days-list': { gap: '4px', flexWrap: 'nowrap' },
               '.week-day-pill': { minWidth: '40px', padding: '4px 6px' },
-              '.meet-banner-card': { flexDirection: 'column', alignItems: 'flex-start', gap: '14px', padding: '14px 16px' },
+              '.meet-banner-card': { flexDirection: 'column', alignItems: 'stretch', gap: '14px', padding: '14px 16px', width: '100%', minWidth: '0' },
+              '.banner-left': { width: '100%', minWidth: '0' },
               '.banner-btn-link': { width: '100%', textAlign: 'center' },
               '.meetings-grid': { gridTemplateColumns: '1fr !important' },
-              '.meeting-card': { padding: '16px', width: '100%' },
+              '.meeting-card': { padding: '16px', width: '100%', minWidth: '0' },
+              '.meeting-card-actions': { width: '100%', minWidth: '0' },
               '.modal-box-meet': { width: '95vw !important', maxWidth: '95vw !important', maxHeight: '90vh', overflowY: 'auto' },
               '.modal-body-meet': { flexDirection: 'column !important', minHeight: 'auto' },
               '.settings-tabs-sidebar': { width: '100% !important', flexDirection: 'row !important', borderRight: 'none !important', borderBottom: '1px solid #e2e8f0', padding: '10px', gap: '6px', overflowX: 'auto' },
@@ -106,7 +108,7 @@
               '.auth-card-meet': { padding: '24px 16px' },
               '.auth-title': { fontSize: '20px' },
               '.meeting-card-actions': { flexWrap: 'wrap' },
-              '.btn-card-start, .btn-card-copy': { flex: '1', justifyContent: 'center', textAlign: 'center' },
+              '.btn-card-start, .btn-card-copy': { flex: '1 1 0%', minWidth: '0', justifyContent: 'center', textAlign: 'center' },
             }
           });
         }
