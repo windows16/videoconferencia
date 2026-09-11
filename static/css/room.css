@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Videoconference Room - Navy Blue & Telecom Cyber Theme
+   Videoconference Room - Navy Blue & Telecom Cyber Theme (Fully Responsive)
    ========================================================================== */
 
 .meet-room-body {
@@ -7,6 +7,7 @@
   color: #ffffff;
   height: 100vh;
   width: 100vw;
+  max-width: 100%;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -22,12 +23,14 @@
   background: linear-gradient(90deg, #0a1329 0%, #0e1e3e 100%);
   border-bottom: 1px solid rgba(56, 189, 248, 0.15);
   z-index: 10;
+  flex-shrink: 0;
 }
 
 .room-title-info {
   display: flex;
   align-items: center;
   gap: 16px;
+  min-width: 0;
 }
 
 .room-meeting-code {
@@ -39,6 +42,9 @@
   padding: 4px 10px;
   border-radius: 6px;
   color: #38bdf8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .room-vpn-secure-badge {
@@ -52,12 +58,14 @@
   background-color: rgba(5, 150, 105, 0.2);
   color: #34d399;
   border: 1px solid rgba(5, 150, 105, 0.4);
+  white-space: nowrap;
 }
 
 .room-clock {
   font-size: 14px;
   font-weight: 600;
   color: #94a3b8;
+  white-space: nowrap;
 }
 
 /* Área Principal de Videollamada */
@@ -74,11 +82,13 @@
 .room-video-grid {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
   align-content: center;
   justify-content: center;
-  max-height: calc(100vh - 160px);
+  max-height: 100%;
+  overflow-y: auto;
+  width: 100%;
 }
 
 .video-tile {
@@ -93,6 +103,7 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   border: 2px solid #1e3a8a;
   transition: all 0.2s ease;
+  width: 100%;
 }
 
 .video-tile.speaking {
@@ -110,7 +121,6 @@
 .video-tile.remote-tile video {
   transform: none;
 }
-
 
 .video-tile-placeholder {
   display: flex;
@@ -148,6 +158,10 @@
   align-items: center;
   gap: 8px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: calc(100% - 28px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .tile-overlay-top-right {
@@ -189,6 +203,8 @@
   background: linear-gradient(180deg, #0a1329 0%, #070d1e 100%);
   border-top: 1px solid rgba(56, 189, 248, 0.15);
   z-index: 10;
+  flex-shrink: 0;
+  gap: 12px;
 }
 
 .bottom-left-info {
@@ -197,13 +213,17 @@
   gap: 12px;
   color: #cbd5e1;
   font-size: 14px;
-  min-width: 200px;
+  min-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .bottom-center-controls {
   display: flex;
   align-items: center;
   gap: 14px;
+  justify-content: center;
 }
 
 .ctrl-btn {
@@ -219,6 +239,7 @@
   cursor: pointer;
   transition: all 0.15s ease;
   position: relative;
+  flex-shrink: 0;
 }
 
 .ctrl-btn:hover {
@@ -260,7 +281,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  min-width: 200px;
+  min-width: 140px;
   justify-content: flex-end;
 }
 
@@ -277,6 +298,7 @@
   cursor: pointer;
   position: relative;
   transition: all 0.15s;
+  flex-shrink: 0;
 }
 
 .panel-toggle-btn:hover {
@@ -300,6 +322,7 @@
    -------------------------------------------------------------------------- */
 .room-side-panel {
   width: 380px;
+  max-width: 100%;
   background-color: #0c1b33;
   border-radius: 16px;
   display: none;
@@ -307,6 +330,7 @@
   overflow: hidden;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(56, 189, 248, 0.2);
+  height: 100%;
 }
 
 .room-side-panel.show {
@@ -321,6 +345,7 @@
   justify-content: space-between;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   background: #091528;
+  flex-shrink: 0;
 }
 
 .side-panel-title {
@@ -436,4 +461,139 @@
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   Media Queries para Responsividad Completa (Móvil y Tablets)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .room-header {
+    height: 52px;
+    padding: 0 12px;
+  }
+
+  .room-title-info {
+    gap: 8px;
+  }
+
+  .room-meeting-code {
+    font-size: 13px;
+    padding: 3px 6px;
+  }
+
+  .room-vpn-secure-badge {
+    padding: 2px 8px;
+    font-size: 11px;
+  }
+
+  .room-clock {
+    font-size: 12px;
+  }
+
+  .room-main-area {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .room-video-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .participant-avatar-large {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+  }
+
+  .room-bottom-bar {
+    height: 68px;
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .bottom-left-info {
+    min-width: auto;
+    font-size: 12px;
+  }
+
+  .bottom-center-controls {
+    gap: 8px;
+  }
+
+  .ctrl-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+
+  .btn-end-call {
+    width: 52px;
+  }
+
+  .bottom-right-panels {
+    min-width: auto;
+    gap: 6px;
+  }
+
+  .panel-toggle-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+  }
+
+  /* Drawer móvil para los paneles laterales */
+  .room-side-panel {
+    position: fixed;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 55vh;
+    max-height: 55vh;
+    border-radius: 20px 20px 0 0;
+    z-index: 100;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+    display: flex !important;
+  }
+
+  .room-side-panel.show {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .room-vpn-secure-badge {
+    display: none;
+  }
+
+  .bottom-left-info {
+    display: none;
+  }
+
+  .bottom-center-controls {
+    gap: 6px;
+  }
+
+  .ctrl-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+
+  .btn-end-call {
+    width: 46px;
+  }
+
+  .admission-toast-notification {
+    top: 60px;
+    right: 12px;
+    left: 12px;
+    padding: 12px 16px;
+  }
 }

@@ -732,22 +732,25 @@ body {
 }
 
 .modal-close-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  font-size: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ffffff;
   cursor: pointer;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  z-index: 10;
 }
 
 .modal-close-btn:hover {
-  background-color: rgba(255, 255, 255, 0.25);
+  background-color: #dc2626;
+  border-color: #ef4444;
+  color: #ffffff;
 }
 
 .modal-body-meet {
