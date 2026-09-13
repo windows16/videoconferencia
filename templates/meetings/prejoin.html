@@ -7,31 +7,59 @@
   
   <!-- Columna Izquierda: Vista previa de cámara y controles -->
   <div class="w-full lg:flex-[1.25]">
-    <div style="width: 100%; aspect-ratio: 16/9; background-color: #070d1e; border-radius: 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 30px rgba(10, 17, 40, 0.25); border: 2px solid #1e3a8a;">
+    <div style="width: 100%; aspect-ratio: 16/9; background-color: #070d1e; border-radius: 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 30px rgba(10, 17, 40, 0.35); border: 2px solid #1e3a8a;">
+      <!-- Indicador de estado de señal y cámara -->
+      <div class="prejoin-status-pill">
+        <span class="prejoin-status-dot"></span>
+        <span>Vista Previa Activa</span>
+      </div>
+
       <!-- Video local -->
       <video id="prejoinVideo" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1);"></video>
       
       <!-- Avatar si la cámara está apagada -->
-      <div id="prejoinAvatar" style="display: none; width: 96px; height: 96px; border-radius: 24px; background: linear-gradient(135deg, #0c1b33, #1e40af); color: #ffffff; font-size: 38px; font-weight: 700; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);">
+      <div id="prejoinAvatar" style="display: none; width: 100px; height: 100px; border-radius: 28px; background: linear-gradient(135deg, #0c1b33, #1e40af); color: #ffffff; font-size: 42px; font-weight: 700; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); border: 2px solid rgba(56, 189, 248, 0.3);">
         {{ user.first_name|first|default:user.username|first|upper }}
       </div>
 
-      <!-- Controles flotantes inferiores -->
-      <div style="position: absolute; bottom: 18px; display: flex; gap: 14px; z-index: 10;">
-        <button type="button" class="ctrl-btn" id="btnPrejoinMic" title="Silenciar / Activar micrófono">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-            <line x1="12" y1="19" x2="12" y2="23"></line>
-            <line x1="8" y1="23" x2="16" y2="23"></line>
-          </svg>
+      <!-- Barra flotante de controles con diseño Glassmorphism -->
+      <div class="prejoin-floating-dock">
+        <!-- Botón Micrófono -->
+        <button type="button" class="prejoin-btn" id="btnPrejoinMic" title="Silenciar / Activar micrófono" aria-label="Control de Micrófono">
+          <span class="prejoin-btn-icon icon-mic-on">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+          </span>
+          <span class="prejoin-btn-icon icon-mic-off">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="1" y1="1" x2="23" y2="23"></line>
+              <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"></path>
+              <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+          </span>
         </button>
 
-        <button type="button" class="ctrl-btn" id="btnPrejoinCam" title="Apagar / Encender cámara">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polygon points="23 7 16 12 23 17 23 7"></polygon>
-            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-          </svg>
+        <!-- Botón Cámara -->
+        <button type="button" class="prejoin-btn" id="btnPrejoinCam" title="Apagar / Encender cámara" aria-label="Control de Cámara">
+          <span class="prejoin-btn-icon icon-cam-on">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7"></polygon>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+            </svg>
+          </span>
+          <span class="prejoin-btn-icon icon-cam-off">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="1" y1="1" x2="23" y2="23"></line>
+              <path d="M21 21l-5.64-5.64M23 7l-7 5v2.18M1 5l18 18M10.66 5H14a2 2 0 0 1 2 2v3.34l1 1"></path>
+              <path d="M1 5h2a2 2 0 0 1 2 2v10a2 2 0 0 0 2 2h10"></path>
+            </svg>
+          </span>
         </button>
       </div>
     </div>

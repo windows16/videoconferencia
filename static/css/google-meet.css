@@ -990,6 +990,132 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+   Controles Flotantes en Sala de Preparación (Prejoin)
+   -------------------------------------------------------------------------- */
+.prejoin-floating-dock {
+  position: absolute;
+  bottom: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 18px;
+  background: rgba(10, 17, 40, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(30, 64, 175, 0.25);
+  z-index: 20;
+  transition: all 0.3s ease;
+}
+
+.prejoin-floating-dock:hover {
+  border-color: rgba(56, 189, 248, 0.55);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 25px rgba(56, 189, 248, 0.3);
+}
+
+.prejoin-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid rgba(56, 189, 248, 0.35);
+  background: linear-gradient(135deg, rgba(18, 40, 76, 0.95), rgba(30, 64, 175, 0.85));
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  outline: none;
+}
+
+.prejoin-btn:hover {
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  border-color: #38bdf8;
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.45);
+}
+
+.prejoin-btn:active {
+  transform: translateY(0) scale(0.96);
+}
+
+/* Estado Apagado / Silenciado (Rojo de alerta con halo de aviso) */
+.prejoin-btn.off {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border-color: #ef4444;
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.45);
+}
+
+.prejoin-btn.off:hover {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border-color: #f87171;
+  box-shadow: 0 6px 22px rgba(239, 68, 68, 0.6);
+}
+
+.prejoin-btn.off .icon-mic-on,
+.prejoin-btn.off .icon-cam-on {
+  display: none !important;
+}
+
+.prejoin-btn.off .icon-mic-off,
+.prejoin-btn.off .icon-cam-off {
+  display: flex !important;
+}
+
+.prejoin-btn .icon-mic-on,
+.prejoin-btn .icon-cam-on {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prejoin-btn .icon-mic-off,
+.prejoin-btn .icon-cam-off {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Indicador de estado flotante en la esquina del preview */
+.prejoin-status-pill {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(10, 17, 40, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #38bdf8;
+  z-index: 10;
+}
+
+.prejoin-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #34d399;
+  box-shadow: 0 0 8px #34d399;
+  animation: pulseDot 2s infinite;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+}
+
+/* --------------------------------------------------------------------------
    Formularios de Autenticación (Login & Registro)
    -------------------------------------------------------------------------- */
 .auth-page-wrapper {
