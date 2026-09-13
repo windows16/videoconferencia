@@ -6,6 +6,7 @@
   background-color: #070d1e;
   color: #ffffff;
   height: 100vh;
+  height: 100dvh;
   width: 100vw;
   max-width: 100%;
   overflow: hidden;
@@ -16,13 +17,14 @@
 /* Cabecera Superior de la Sala */
 .room-header {
   height: 60px;
-  padding: 0 28px;
+  min-height: 60px;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: linear-gradient(90deg, #0a1329 0%, #0e1e3e 100%);
   border-bottom: 1px solid rgba(56, 189, 248, 0.15);
-  z-index: 10;
+  z-index: 20;
   flex-shrink: 0;
 }
 
@@ -70,22 +72,27 @@
 
 /* Área Principal de Videollamada */
 .room-main-area {
-  flex: 1;
+  flex: 1 1 0%;
+  min-height: 0;
+  min-width: 0;
   display: flex;
   position: relative;
   overflow: hidden;
-  padding: 16px 20px;
+  padding: 12px 16px;
   gap: 16px;
   background: radial-gradient(circle at center, #0f1c38 0%, #070d1e 100%);
 }
 
 .room-video-grid {
-  flex: 1;
+  flex: 1 1 0%;
+  min-height: 0;
+  min-width: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
   align-content: center;
   justify-content: center;
+  height: 100%;
   max-height: 100%;
   overflow-y: auto;
   width: 100%;
@@ -97,6 +104,8 @@
   overflow: hidden;
   position: relative;
   aspect-ratio: 16 / 9;
+  max-height: 100%;
+  max-width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -104,6 +113,7 @@
   border: 2px solid #1e3a8a;
   transition: all 0.2s ease;
   width: 100%;
+  margin: auto;
 }
 
 .video-tile.speaking {
@@ -195,14 +205,15 @@
    Barra Inferior de Herramientas (Navy Dock)
    -------------------------------------------------------------------------- */
 .room-bottom-bar {
-  height: 84px;
+  height: 76px;
+  min-height: 76px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
+  padding: 0 24px;
   background: linear-gradient(180deg, #0a1329 0%, #070d1e 100%);
   border-top: 1px solid rgba(56, 189, 248, 0.15);
-  z-index: 10;
+  z-index: 30;
   flex-shrink: 0;
   gap: 12px;
 }
@@ -213,7 +224,8 @@
   gap: 12px;
   color: #cbd5e1;
   font-size: 14px;
-  min-width: 140px;
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -222,13 +234,14 @@
 .bottom-center-controls {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .ctrl-btn {
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background-color: #12284c;
@@ -269,7 +282,7 @@
   background-color: #dc2626;
   border-color: #ef4444;
   color: #ffffff;
-  width: 64px;
+  width: 58px;
   border-radius: 14px;
 }
 
@@ -281,7 +294,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  min-width: 140px;
+  flex: 1;
+  min-width: 0;
   justify-content: flex-end;
 }
 
@@ -321,7 +335,7 @@
    Panel Lateral (Participantes, Chat & Admisión)
    -------------------------------------------------------------------------- */
 .room-side-panel {
-  width: 380px;
+  width: 360px;
   max-width: 100%;
   background-color: #0c1b33;
   border-radius: 16px;
@@ -331,6 +345,8 @@
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(56, 189, 248, 0.2);
   height: 100%;
+  flex-shrink: 0;
+  z-index: 25;
 }
 
 .room-side-panel.show {
@@ -467,9 +483,30 @@
    Media Queries para Responsividad Completa (Móvil y Tablets)
    ========================================================================== */
 
+@media (max-width: 900px) {
+  .room-bottom-bar {
+    padding: 0 16px;
+    gap: 8px;
+  }
+  .bottom-left-info {
+    font-size: 13px;
+  }
+  .bottom-center-controls {
+    gap: 8px;
+  }
+  .ctrl-btn {
+    width: 44px;
+    height: 44px;
+  }
+  .btn-end-call {
+    width: 52px;
+  }
+}
+
 @media (max-width: 768px) {
   .room-header {
-    height: 52px;
+    height: 50px;
+    min-height: 50px;
     padding: 0 12px;
   }
 
@@ -498,7 +535,7 @@
 
   .room-video-grid {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 8px;
   }
 
   .participant-avatar-large {
@@ -508,33 +545,45 @@
   }
 
   .room-bottom-bar {
-    height: 68px;
-    padding: 0 12px;
-    gap: 8px;
+    height: 64px;
+    min-height: 64px;
+    padding: 0 10px;
+    gap: 6px;
   }
 
   .bottom-left-info {
-    min-width: auto;
-    font-size: 12px;
+    display: none;
   }
 
   .bottom-center-controls {
-    gap: 8px;
+    gap: 6px;
+    margin: 0 auto;
   }
 
   .ctrl-btn {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
     border-radius: 10px;
-    font-size: 14px;
+    font-size: 13px;
+  }
+
+  .ctrl-btn svg {
+    width: 18px;
+    height: 18px;
   }
 
   .btn-end-call {
-    width: 52px;
+    width: 48px;
+  }
+
+  .btn-end-call svg {
+    width: 18px;
+    height: 18px;
   }
 
   .bottom-right-panels {
     min-width: auto;
+    flex: initial;
     gap: 6px;
   }
 
@@ -544,19 +593,24 @@
     border-radius: 8px;
   }
 
-  /* Drawer móvil para los paneles laterales */
+  .panel-toggle-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Drawer móvil para los paneles laterales (por encima de la barra de controles) */
   .room-side-panel {
     position: fixed;
     top: auto;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: 64px;
     width: 100%;
-    height: 55vh;
-    max-height: 55vh;
+    height: calc(65vh - 64px);
+    max-height: calc(80vh - 64px);
     border-radius: 20px 20px 0 0;
     z-index: 100;
-    transform: translateY(100%);
+    transform: translateY(120%);
     transition: transform 0.3s ease-in-out;
     display: flex !important;
   }
@@ -571,29 +625,63 @@
     display: none;
   }
 
-  .bottom-left-info {
-    display: none;
+  .room-header {
+    height: 46px;
+    min-height: 46px;
+    padding: 0 8px;
+  }
+
+  .room-bottom-bar {
+    height: 60px;
+    min-height: 60px;
+    padding: 0 6px;
+    gap: 4px;
   }
 
   .bottom-center-controls {
-    gap: 6px;
+    gap: 4px;
+  }
+
+  /* Ocultar compartir pantalla en pantallas pequeñas para asegurar que todos los controles quepan */
+  #btnToggleScreen {
+    display: none;
   }
 
   .ctrl-btn {
-    width: 38px;
-    height: 38px;
-    font-size: 13px;
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
     border-radius: 8px;
   }
 
+  .ctrl-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
   .btn-end-call {
-    width: 46px;
+    width: 42px;
+  }
+
+  .panel-toggle-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .panel-toggle-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .room-side-panel {
+    bottom: 60px;
+    height: calc(70vh - 60px);
   }
 
   .admission-toast-notification {
-    top: 60px;
-    right: 12px;
-    left: 12px;
-    padding: 12px 16px;
+    top: 50px;
+    right: 8px;
+    left: 8px;
+    padding: 10px 14px;
   }
 }

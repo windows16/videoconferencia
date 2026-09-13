@@ -578,8 +578,10 @@ body {
    -------------------------------------------------------------------------- */
 .meetings-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .meeting-card {
@@ -594,7 +596,8 @@ body {
   transition: all 0.2s ease;
   border-top: 4px solid var(--navy-primary);
   min-width: 0;
-  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .meeting-card:hover {
@@ -608,6 +611,8 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .meeting-card-time {
@@ -625,6 +630,7 @@ body {
   font-weight: 600;
   color: var(--navy-darker);
   margin-bottom: 6px;
+  word-break: break-word;
 }
 
 .meeting-card-code {
@@ -636,6 +642,8 @@ body {
   padding: 2px 8px;
   border-radius: 6px;
   margin-bottom: 14px;
+  max-width: 100%;
+  word-break: break-all;
 }
 
 .meeting-card-actions {
@@ -646,6 +654,7 @@ body {
   padding-top: 14px;
   border-top: 1px solid var(--border-light);
   min-width: 0;
+  flex-wrap: wrap;
 }
 
 .btn-card-start {
@@ -659,10 +668,10 @@ body {
   cursor: pointer;
   text-decoration: none;
   display: inline-flex;
-  min-width: 0;
   align-items: center;
   gap: 8px;
   transition: all 0.15s;
+  white-space: nowrap;
 }
 
 .btn-card-start:hover {
@@ -680,9 +689,6 @@ body {
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.15s;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -1110,3 +1116,111 @@ body {
   background-color: var(--navy-subtle-bg);
   color: var(--navy-primary);
 }
+
+/* ==========================================================================
+   Media Queries Responsivas para Dashboard y Layout Global
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .meet-header {
+    padding: 0 16px;
+  }
+  .meet-main-content {
+    padding: 20px 20px 36px 20px;
+  }
+  .meetings-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .meet-header {
+    padding: 0 12px;
+    height: 56px;
+  }
+  .meet-logo-text {
+    display: none;
+  }
+  .meet-header-center {
+    margin: 0 8px;
+  }
+  .btn-upgrade-pill {
+    display: none;
+  }
+  .vpn-status-badge span {
+    display: none;
+  }
+  .meet-app-layout {
+    flex-direction: column;
+  }
+  .meet-main-content {
+    padding: 16px 14px 80px 14px;
+    max-width: 100%;
+  }
+  .meetings-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .meeting-card {
+    padding: 16px;
+  }
+  .btn-card-start, .btn-card-copy {
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+  }
+  .meet-calendar-top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+  .week-navigation-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .meet-banner-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+  .banner-btn-link {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .meet-header {
+    padding: 0 8px;
+    height: 52px;
+  }
+  .meet-logo-icon {
+    width: 34px;
+    height: 34px;
+  }
+  .btn-new-meeting span {
+    display: none;
+  }
+  .btn-new-meeting {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+  .btn-join {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  .vpn-status-badge {
+    display: none;
+  }
+  .meet-main-content {
+    padding: 12px 10px 72px 10px;
+  }
+  .auth-card-meet {
+    padding: 24px 16px;
+  }
+}
+
